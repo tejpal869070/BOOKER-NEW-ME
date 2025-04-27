@@ -227,7 +227,7 @@ export default function AutoMode({ refreshHistoryFunction }) {
     const userDataGet = async () => {
       const response = await GetUserDetails();
       if (response !== null) {
-        const newBalance = Number(response[0].color_wallet_balnace);
+        const newBalance = Number(response[0].game_wallet);
         setUser(response[0]);
         setTotalBalance(newBalance);
         setStartingBalance(newBalance);

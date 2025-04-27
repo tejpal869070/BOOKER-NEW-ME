@@ -43,9 +43,13 @@ export default function Hero1() {
 
   const userDataGet = async () => {
     const response = await GetUserDetails();
+    console.log(response?.data?.user);
     if (response !== null) {
-      setUserData(response[0]);
-      sessionStorage.setItem("userDetails", JSON.stringify(response[0]));
+      setUserData(response?.data?.user);
+      sessionStorage.setItem(
+        "userDetails",
+        JSON.stringify(response?.data?.user)
+      );
       setLoading(false);
     }
   };
@@ -56,7 +60,7 @@ export default function Hero1() {
     if (id === 1) {
       setAmountHave(userData.wallet_balance);
     } else {
-      setAmountHave(userData.color_wallet_balnace);
+      setAmountHave(userData.game_wallet);
     }
   };
 
@@ -81,30 +85,17 @@ export default function Hero1() {
 
   const successFunction = async (pin) => {
     try {
-      const response = await MainGameWalletMoneyTransfer(formData, pin);
-      if (response.status) {
-        setSuccess(true);
-        userDataGet();
-        setTransferToAmount(0);
-        setIsOpen(false);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 3500);
-      } else {
-        toast.error(`Please Try Again !`, {
-          position: "top-center",
-        });
-      }
+      await MainGameWalletMoneyTransfer(formData, pin);
+
+      setSuccess(true);
+      userDataGet();
+      setTransferToAmount(0);
+      setIsOpen(false);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3500);
     } catch (error) {
-      if (error.response.status === 302) {
-        toast.error(`${error.response.data.message}`, {
-          position: "top-center",
-        });
-      } else {
-        toast.error(`Something Went Wrong !`, {
-          position: "top-center",
-        });
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
     }
   };
 
@@ -131,7 +122,7 @@ export default function Hero1() {
         >
           <div className="z-[9]">
             <h1 className="text-xl font-bold  text-white ">
-              Congratulations {userData && userData?.uname}! 🎉
+              Congratulations {userData && userData?.user_name}! 🎉
             </h1>
             <p className="text-sm mt-2 text-gray-100">
               Joining: {userData && userData?.date?.split("T")[0]}
@@ -203,8 +194,7 @@ export default function Hero1() {
               <p className="text-2xl font-bold text-black dark:text-gray-300">
                 $
                 {(
-                  Number(userData.wallet_balance) +
-                  Number(userData.color_wallet_balnace)
+                  Number(userData.game_wallet) + Number(userData.main_wallet)
                 ).toFixed(2)}
               </p>
             </div>
@@ -216,8 +206,6 @@ export default function Hero1() {
             </div>
           </div>
         </div>
-
-        
       </div>
       <div className="flex justify-around items-center md:hidden">
         <div className="">
@@ -237,7 +225,7 @@ export default function Hero1() {
             $
             {(
               Number(userData.wallet_balance) +
-              Number(userData.color_wallet_balnace)
+              Number(userData.game_wallet)
             ).toFixed(2)}
           </p>
           <p className="text-[9px] font-medium text-center dark:text-gray-200">
@@ -325,7 +313,7 @@ export default function Hero1() {
                   Main Wallet
                 </p>
                 <p className="font-semibold text-xl text-center mt-2 pt-2 border-gray-400  text-white border-t-2">
-                  ${Number(userData.wallet_balance).toFixed(2)}
+                  ${Number(userData.main_wallet).toFixed(2)}
                 </p>
               </section>
               <section className="px-6 py-2 rounded border-2 border-white">
@@ -333,7 +321,7 @@ export default function Hero1() {
                   Game Wallet
                 </p>
                 <p className="font-semibold text-xl text-center mt-2 pt-2 border-gray-400  text-white border-t-2">
-                  ${Number(userData.color_wallet_balnace).toFixed(2)}
+                  ${Number(userData.game_wallet).toFixed(2)}
                 </p>
               </section>
             </div>
@@ -383,8 +371,8 @@ export default function Hero1() {
               <span className="text-lg font-bold">
                 ${" "}
                 {type === 1
-                  ? Number(userData.wallet_balance).toFixed(2)
-                  : Number(userData.color_wallet_balnace).toFixed(2)}
+                  ? Number(userData.main_wallet).toFixed(2)
+                  : Number(userData.game_wallet).toFixed(2)}
               </span>
             </p>{" "}
             <div className="max-w-sm mt-4">

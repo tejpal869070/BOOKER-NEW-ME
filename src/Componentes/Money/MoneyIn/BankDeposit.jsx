@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
-import { GetPaymentMethod } from "../../../Controllers/User/UserController";
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Loading3 } from "../../Loading1";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FaCopy } from "react-icons/fa";
 import { API } from "../../../Controllers/Api";
 import { BsQrCodeScan } from "react-icons/bs";
 import gif1 from "../../../assets/photos/cryptodepositgif.gif";
-import { MdCancel } from "react-icons/md"; 
+import { MdCancel } from "react-icons/md";
 import { Loading1 } from "../../Loading1";
 import { AddCryptoDepositRequest } from "../../../Controllers/User/UserController";
 
 export default function BankDeposit() {
-  const [pageloading, setPageLoading] = useState(true);
-  const [data, setData] = useState();
   const [isQrShow, setQrShow] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const [transection_id, setTransectionId] = useState("");
   const [amount, setAmount] = useState(10);
@@ -28,9 +26,7 @@ export default function BankDeposit() {
     amount: amount,
     transection_id: transection_id,
     image: image,
-    deposit_id: data?.address,
-    price_at_that_time: data?.price,
-    currency: data?.currency,
+    deposit_to: "SA65S4GT84STR84LDT4R6E5S4651G6A5SEG84AEGA",
   };
 
   const handleForm = async (e) => {
@@ -56,31 +52,18 @@ export default function BankDeposit() {
       return;
     }
     try {
-      const response = await AddCryptoDepositRequest(formData);
-      if (response.status) {
-        setLoading(false);
-        toast.success("Deposit Success. Verifying...", {
-          position: "top-center",
-        });
-        setImage(null);
-        setTransectionId("");
-        setAmount(10);
-      } else {
-        toast.warn("Something Went Wrong !", {
-          position: "top-center",
-        });
-        setLoading(false);
-      }
+      await AddCryptoDepositRequest(formData);
+
+      setLoading(false);
+      toast.success("Deposit Success. Verifying...", {
+        position: "top-center",
+      });
+      setImage(null);
+      setTransectionId("");
+      setAmount(10);
     } catch (error) {
-      if (error?.response.status === 302) {
-        toast.warn(`${error.response.data.message}`);
-        setLoading(false);
-      } else {
-        toast.warn("Server Error !", {
-          position: "top-center",
-        });
-        setLoading(false);
-      }
+      toast.warn(error?.response?.data?.message || "Internal Server Error !");
+      setLoading(false);
     }
   };
 
@@ -91,48 +74,27 @@ export default function BankDeposit() {
   };
 
   // Get Deposit methodes -----------------------------------------------
-  const getDepositMethode = async () => {
-    const response = await GetPaymentMethod();
-    if (response.status) {
-      setData(response.usdt[0]);
-      setPageLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    getDepositMethode();
-  }, []);
-
-  
-
-  if (isQrShow) {
-    return (
-      <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-[#000000d1] bg-opacity-50 z-[9999]">
-        <img
-          alt="success"
-          className="w-60 h-60"
-          src={`${API.url}assets/img/${data.qr_code}`}
-        />
-        <p className="text-2xl text-white font-semibold">
-          {data?.currency} QR CODE
-        </p>
-        <MdCancel
-          className="cursor-pointer mt-6"
-          color="white"
-          onClick={() => setQrShow(false)}
-          size={28}
-        />
-      </div>
-    );
-  }
-
-  if (pageloading) {
-    return (
-      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50 z-[9999]">
-        <Loading3 />
-      </div>
-    );
-  }
+  // if (isQrShow) {
+  //   return (
+  //     <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-[#000000d1] bg-opacity-50 z-[9999]">
+  //       <img
+  //         alt="success"
+  //         className="w-60 h-60"
+  //         src={`${API.url}assets/img/${data.qr_code}`}
+  //       />
+  //       <p className="text-2xl text-white font-semibold">
+  //         {data?.currency} QR CODE
+  //       </p>
+  //       <MdCancel
+  //         className="cursor-pointer mt-6"
+  //         color="white"
+  //         onClick={() => setQrShow(false)}
+  //         size={28}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -141,7 +103,11 @@ export default function BankDeposit() {
         <div className="bg-[#e1e6ff] dark:bg-[#868ba3fc]   text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden">
           <div className="md:flex flex-row-reverse  ">
             <div className="w-full md:w-1/2   bg-indigo-200  p-2">
-              <img alt="animation" className="w-full h-full  rounded-t-2xl md:rounded-2xl" src={gif1} />
+              <img
+                alt="animation"
+                className="w-full h-full  rounded-t-2xl md:rounded-2xl"
+                src={gif1}
+              />
             </div>
             <div className="w-full md:w-1/2 py-10 px-5 md:px-10">
               <div className="  mb-6">
@@ -151,15 +117,20 @@ export default function BankDeposit() {
               </div>
               <div className="   ">
                 <h1 className=" font-semibold text-lg text-black dark:text-gray-200">
-                  {data?.currency} ADDRESS
+                  {/* {data?.currency} ADDRESS */}
+                  USDT ADDRESS
                 </h1>
                 <div className="flex gap-2 items-center">
                   <p className="w-[90%] overflow-hidden shadow-xl flex justify-between items-center focus:animate-none   inline-flex text-md font-medium bg-indigo-900 mt-1 px-4   py-2 rounded-lg tracking-wide text-white">
                     <p className="w-[90%] overflow-hidden line-clamp-1">
-                      {data && data.address}{" "}
+                      {/* {data && data.address}{" "} */}
+                      SA65S4GT84STR84LDT4R6E5S4651G6A5SEG84AEGA
                     </p>
                     <div className="">
-                      <CopyToClipboard text={data.address} onCopy={handleCopy}>
+                      <CopyToClipboard
+                        text={`SA65S4GT84STR84LDT4R6E5S4651G6A5SEG84AEGA`}
+                        onCopy={handleCopy}
+                      >
                         <FaCopy className="cursor-pointer  " />
                       </CopyToClipboard>
                     </div>
@@ -210,7 +181,6 @@ export default function BankDeposit() {
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                     />
-                    
                   </div>
                   <div className="flex align-center items-center mt-4 col-span-7 sm:col-span-7">
                     {image !== null ? (

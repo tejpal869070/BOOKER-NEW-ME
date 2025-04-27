@@ -6,7 +6,8 @@ import {
 } from "../../../../Controllers/User/UserController";
 import { Loading1, Loading3 } from "../../../Loading1";
 import VerifyPin from "../../../VerifyPin";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css'; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import swal from "sweetalert";
 
 export default function CryptoWithdrawal() {
@@ -18,7 +19,7 @@ export default function CryptoWithdrawal() {
   const [isOpen, setIsOpen] = useState(false);
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState(25);
-  const [processing, setProcessing] = useState(false); 
+  const [processing, setProcessing] = useState(false);
 
   const onclose2 = () => {
     setIsOpen(false);
@@ -27,42 +28,27 @@ export default function CryptoWithdrawal() {
   const formData = {
     amount: amount,
     address: address,
-    price_at_time: user.currency_rate,
-    currency: user.currency,
   };
 
   const successFunction = async (pin) => {
     try {
-      const response = await AddCryptoWithdrawalRequest(formData, pin);
-      if (response.status) {
-        setProcessing(false);
-        userDataGet();
-        toast.success("Withdrawal Verifying...", {
-          position: "top-center",
-        });
-        setAddress("");
-        setAmount(10);
-      } else {
-        toast.warn("Something Went Wrong !", {
-          position: "bottom-right",
-        });
-        setProcessing(false);
-      }
+      await AddCryptoWithdrawalRequest(formData, pin);
+
+      setProcessing(false);
+      userDataGet();
+      toast.success("Withdrawal Verifying...", {
+        position: "top-center",
+      });
+      setAddress("");
+      setAmount(10);
     } catch (error) {
-      if (error?.response?.status === 302) {
-        swal("Error!", `${error.response.data.message}`, "error");
-        setProcessing(false);
-      } else {
-        toast.warn("Server Error !", {
-          position: "bottom-right",
-        });
-        setProcessing(false);
-      }
+      toast.error(error.response.data.message || "Internal Server Error !");
+      setProcessing(false);
     }
   };
 
   const handle1 = async () => {
-    if (amount < 25) {
+    if (amount < 25 || isNaN(amount)) {
       toast.warn("Minimum Withdrawal is 25", {
         position: "top-center",
       });
@@ -72,21 +58,19 @@ export default function CryptoWithdrawal() {
         position: "bottom-right",
       });
       return;
-    } else if (
-      Number(amount) > 
-      Number(user.wallet_balance) / Number(user.currency_rate)
-    ) {
+    } else if (Number(amount) > Number(user.main_wallet)) {
       toast.warn("Insufficient Balance", {
         position: "bottom-right",
       });
+      return;
     }
     setIsOpen(true);
   };
 
   const userDataGet = async () => {
-    const response = await GetUserDetails();      
+    const response = await GetUserDetails();
     if (response !== null) {
-      setUser(response[0]);
+      setUser(response?.data?.user);
       setLoading(false);
     } else {
       setLoading(false);
@@ -113,7 +97,11 @@ export default function CryptoWithdrawal() {
       <div className="bg-[#e1e6ff] dark:bg-[#868ba3fc] text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden">
         <div className="md:flex flex-row-reverse w-full">
           <div className="w-full md:w-1/2 bg-indigo-200  p-2">
-            <img alt="animation" className="w-full h-full rounded-t-2xl md:rounded-2xl " src={gif1} />
+            <img
+              alt="animation"
+              className="w-full h-full rounded-t-2xl md:rounded-2xl "
+              src={gif1}
+            />
           </div>
           <div className="w-full md:w-1/2 py-10 px-5 md:px-10">
             <div className="  mb-6">
@@ -122,8 +110,8 @@ export default function CryptoWithdrawal() {
               </h1>
             </div>
             <p className="  font-medium text-lg dark:text-[#d4e11d] text-[green] mb-4">
-              Crypto Balance ({user.currency}) : ${" "}
-              {user && Number(user.wallet_balance).toFixed(2)}
+              Crypto Balance USDT: ${" "}
+              {user && Number(user.main_wallet).toFixed(2)}
             </p>
 
             <div className="grid grid-cols-12 gap-6 mt-10">

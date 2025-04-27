@@ -1,78 +1,55 @@
 import axios from "axios";
-import { API } from "../Api"; 
+import { API } from "../Api";
 
-var mobile = sessionStorage.getItem("mobile");
+var email = sessionStorage.getItem("email");
 var bearerToken = sessionStorage.getItem("token");
+var mobile = "8690708302";
 
 export const CheckUserExistance = async (formData) => {
-  try {
-    const postData = {
-      mobile: formData.mobile,
-      email: formData.email,
-      reffer_by: formData.reffer_by,
-      position : formData.position || "L"
-    };
+  const postData = {
+    mobile: formData.mobile,
+    email: formData.email,
+  };
 
-    const response = await axios.post(
-      `${API.url}user/check-user-existence`,
-      postData
-    );
+  const response = await axios.post(`${API.url}check-user-existance`, postData);
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  return response;
 };
 
 export const userRegistration = async (formData) => {
-  try {
-    const postData = {
-      name: formData.name,
-      mobile: formData.mobile,
-      password: formData.password,
-      email: formData.email,
-      reffer_by: formData.reffer_by,
-      position: formData.position,
-      token: formData.token,
-    };
+  const postData = {
+    user_name: formData.name,
+    mobile: formData.mobile,
+    password: formData.password,
+    email: formData.email,
+  };
 
-    const response = await axios.post(`${API.url}user/register`, postData);
+  const response = await axios.post(`${API.url}register`, postData);
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  return response;
 };
 
 export const userLogin = async (userData) => {
-  try {
-    const postData = {
-      mobile: userData.mobile,
-      password: userData.password,
-    };
+  const postData = {
+    email: userData.email,
+    password: userData.password,
+  };
 
-    const response = await axios.post(`${API.url}user/login`, postData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axios.post(`${API.url}login`, postData);
+  return response;
 };
 
 export const SendOtp = async (formData) => {
-  try {
-    const dataToSend = {
-      email: formData.email,
-    };
-    const response = await axios.post(`${API.url}user/get-otp`, dataToSend);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const dataToSend = {
+    email: formData.email,
+  };
+  const response = await axios.post(`${API.url}send-otp`, dataToSend);
+  return response.data;
 };
 
 export const CheckToken = async () => {
   const postData = {
-    mobile: mobile,
+    email: email,
   };
 
   const axiosConfig = {
@@ -80,16 +57,13 @@ export const CheckToken = async () => {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}user/token-check`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+
+  const response = await axios.post(
+    `${API.url}check-token`,
+    postData,
+    axiosConfig
+  );
+  return response;
 };
 
 export const VerifyOtp = async (formData) => {
@@ -99,7 +73,7 @@ export const VerifyOtp = async (formData) => {
       otp: formData.otp,
     };
 
-    const response = await axios.post(`${API.url}user/verify-otp`, postData);
+    const response = await axios.post(`${API.url}verify-otp`, postData);
 
     return response.data;
   } catch (error) {
@@ -165,27 +139,23 @@ export const SendMoneyToUser = async (formData, pin) => {
 };
 
 export const PinVerification = async (pin) => {
-  try {
-    const dataToSent = {
-      pin: pin,
-      mobile: mobile,
-    };
+  const dataToSent = {
+    pin: pin,
+    email: email,
+  };
 
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    };
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
 
-    const response = await axios.post(
-      `${API.url}user/verify-pin`,
-      dataToSent,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axios.post(
+    `${API.url}verify-pin`,
+    dataToSent,
+    axiosConfig
+  );
+  return response;
 };
 
 export const ChangeSecurityPin = async (formData) => {

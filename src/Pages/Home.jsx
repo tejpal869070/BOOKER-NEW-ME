@@ -41,7 +41,6 @@ export default function Home() {
 
   const dropdownClassList =
     "flex w-full p-2 pl-0 text-gray-900 rounded-lg group dark:text-black dark:hover:text-black  hover:bg-[#919ffdfc]  hover:animate-fade-right hover:animate-once hover:justify-center hover:animate-duration-[400ms]";
- 
 
   const handleHideSideBar = () => {
     const sidebar = document.getElementById("sidebar-multi-level-sidebar");
@@ -59,8 +58,8 @@ export default function Home() {
   const userGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setuser(response[0]);
-      sessionStorage.setItem("userDetails", JSON.stringify(response[0]));
+      setuser(response?.data?.user);
+      // sessionStorage.setItem("userDetails", JSON.stringify(response[0]));
       setLoading(false);
     }
   };
@@ -75,7 +74,7 @@ export default function Home() {
     if (id === 1) {
       setAmountHave(user.wallet_balance);
     } else {
-      setAmountHave(user.color_wallet_balnace);
+      setAmountHave(user.game_wallet);
     }
   };
 
@@ -105,27 +104,14 @@ export default function Home() {
 
   const successFunction = async (pin) => {
     try {
-      const response = await MainGameWalletMoneyTransfer(formData, pin);
-      if (response.status) {
-        userGet();
-        setTransferToAmount(0);
-        setIsOpen2(false);
-        window.location.reload();
-      } else {
-        toast.error(`Please Try Again !`, {
-          position: "top-center",
-        });
-      }
+      await MainGameWalletMoneyTransfer(formData, pin);
+
+      userGet();
+      setTransferToAmount(0);
+      setIsOpen2(false);
+      window.location.reload();
     } catch (error) {
-      if (error.response.status === 302) {
-        toast.error(`${error.response.data.message}`, {
-          position: "top-center",
-        });
-      } else {
-        toast.error(`Something Went Wrong !`, {
-          position: "top-center",
-        });
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
     }
   };
 
@@ -1059,7 +1045,7 @@ export default function Home() {
                   Main Wallet
                 </p>
                 <p className="font-semibold text-xl text-center mt-2 pt-2 border-gray-400  text-white border-t-2">
-                  ${Number(user.wallet_balance).toFixed(2)}
+                  ${Number(user.main_wallet).toFixed(2)}
                 </p>
               </section>
               <section className="px-6 py-2 rounded border-2 border-white">
@@ -1067,7 +1053,7 @@ export default function Home() {
                   Game Wallet
                 </p>
                 <p className="font-semibold text-xl text-center mt-2 pt-2 border-gray-400  text-white border-t-2">
-                  ${Number(user.color_wallet_balnace).toFixed(2)}
+                  ${Number(user.game_wallet).toFixed(2)}
                 </p>
               </section>
             </div>
@@ -1115,10 +1101,10 @@ export default function Home() {
               {"  "}
               {"  "}
               <span className="text-lg font-bold">
-                $ 
+                $
                 {type === 1
-                  ? Number(user.wallet_balance).toFixed(2)
-                  : Number(user.color_wallet_balnace).toFixed(2)}
+                  ? Number(user.main_wallet).toFixed(2)
+                  : Number(user.game_wallet).toFixed(2)}
               </span>
             </p>{" "}
             <div className="max-w-sm mt-4">

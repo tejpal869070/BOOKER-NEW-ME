@@ -25,7 +25,7 @@ export default function Games() {
         const response = await GetAllCasinoGames();
         setGames(response?.data?.games);
       } catch (error) {
-        window.alert("Something Went Wrong.");
+        console.log(error)
       }
     };
 

@@ -47,8 +47,8 @@ export default function ManualMode({
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setTotalBalance(Number(response[0].color_wallet_balnace));
-      setUser(response[0]);
+      setTotalBalance(Number(response?.data?.user?.game_wallet));
+      setUser(response?.data?.user);
     } else {
       window.location.href = "/";
     }
@@ -58,22 +58,13 @@ export default function ManualMode({
   const updateWalletBalance = async (type, amount) => {
     formData.type = type;
     formData.amount = amount;
-    formData.game_type = "Mines";
-    formData.uid = user?.uid;
+    formData.game_type = "Mines"; 
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response.status) {
-        refreshHistoryFunction();
-      }
+      await MinesGameUpdateWallet(formData);
+      refreshHistoryFunction();
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-      } else {
-        toast.error("Server Error");
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
     }
   };
 

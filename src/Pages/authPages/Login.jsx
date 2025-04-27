@@ -21,7 +21,7 @@ export default function Login() {
   };
 
   const userData = {
-    mobile: mobile,
+    email: mobile,
     password: password,
   };
 
@@ -39,30 +39,16 @@ export default function Login() {
     }
     try {
       const response = await userLogin(userData);
-      if (response.status) {
-        sessionStorage.setItem("token", response.token);
-        sessionStorage.setItem("mobile", response.mobile);
-        toast.success("Login Successfull");
-        setCreating(false);
-        setTimeout(function () {
-          window.location.href = "/home";
-        }, 1000);
-      } else {
-        toast.error("Invalid Credentials");
-        setCreating(false);
-        return;
-      }
-    } catch (error) { 
-      if (
-        error.response &&
-        (error.response.status === 404 || error.response.status === 401)
-      ) {
-        toast.error(`${error.response.data.message}`);
-        setCreating(false);
-        return;
-      }
-
-      toast.error("Server Error !");
+      console.log(response)
+      sessionStorage.setItem("token", response?.data?.token);
+      sessionStorage.setItem("email", response?.data?.email);
+      toast.success("Login Successfull");
+      setCreating(false);
+      setTimeout(function () {
+        window.location.href = "/home";
+      }, 800);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
       setCreating(false);
     }
   };

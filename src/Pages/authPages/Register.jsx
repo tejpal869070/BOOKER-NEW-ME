@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import bg1 from "../../assets/photos/stadium2.jpg";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
   CheckUserExistance,
@@ -27,7 +28,7 @@ export default function Register() {
 
   const location = useLocation();
   const [otp, setOtp] = useState("");
- 
+
   const getQueryParam = (name) => {
     const searchParams = new URLSearchParams(location.search);
     return searchParams.get(name);
@@ -64,27 +65,19 @@ export default function Register() {
       return;
     }
     try {
-      const response = await CheckUserExistance(formData);
-      if (!response.status) {
-        toast.error("Email or Mobile already exists");
-        setLoading(false);
-        return;
-      }
+      await CheckUserExistance(formData);
+
       try {
-        const otpResponse = await SendOtp(formData);
-        if (otpResponse.status) {
-          setOtpSent(true);
-          setLoading(false);
-          setOtp(otpResponse.data[0].otp);
-        } else {
-          toast.error("Error in sending OTP");
-        }
+        const otpResponse = await SendOtp(formData); 
+        setOtpSent(true);
+        setLoading(false);
+        setOtp(otpResponse?.otp);
       } catch (error) {
         toast.error("Error in sending OTP");
         setLoading(false);
       }
     } catch (error) {
-      toast.error("Error occurred during registration");
+      toast.error(error?.response?.data?.message || "Internal server Error !");
       setLoading(false);
     } finally {
       setLoading(false);
@@ -180,7 +173,7 @@ export default function Register() {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </div>
-                    <div className="relative">
+                    {/* <div className="relative">
                       <TbUsersPlus
                         size={20}
                         className="  absolute top-2.5 left-2"
@@ -195,7 +188,7 @@ export default function Register() {
                         value={reffer_by}
                         onChange={(e) => setRefferBy(e.target.value)}
                       />
-                    </div>
+                    </div> */}
                     <div className="relative mt-10">
                       {/* <button className="bg-cyan-500 text-white rounded-md px-2 py-1">
                     Submit
@@ -228,7 +221,7 @@ export default function Register() {
           </div>
         </div>
       ) : (
-        <OtpVerify goBack={goBack} formData={formData} recivedOtp={otp}/>
+        <OtpVerify goBack={goBack} formData={formData} recivedOtp={otp} />
       )}
     </div>
   );

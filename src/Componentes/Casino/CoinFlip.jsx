@@ -152,7 +152,7 @@ export default function CoinFlip() {
     const response = await GetUserDetails();
     if (response !== null) {
       setUser(response[0]);
-      setTotalBalance(Number(response[0].color_wallet_balnace));
+      setTotalBalance(Number(response[0].game_wallet));
     } else {
       window.location.href = "/";
     }

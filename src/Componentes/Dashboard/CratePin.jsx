@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import OTPInput from "react-otp-input";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { CreateAccountPin } from "../../Controllers/User/UserController";
 import { Loading1 } from "../Loading1";
 import gif1 from "../../assets/photos/lock.png";
@@ -21,16 +22,11 @@ const CreatePin = () => {
     }
     setError("");
     try {
-      const response = await CreateAccountPin(pin);
-      if (response.status) {
-        setSuccess(true);
-        setLoading(false);
-      } else {
-        setError("Something Went Wrong");
-        setLoading(false);
-      }
+      await CreateAccountPin(pin); 
+      setSuccess(true);
+      setLoading(false);
     } catch (error) {
-      setError("Server Error"); 
+      setError(error?.response?.data?.message || "Internal Server Error !");
       setLoading(false);
     }
   };

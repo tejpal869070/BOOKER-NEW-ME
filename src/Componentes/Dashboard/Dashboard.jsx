@@ -1,91 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { FaWallet, FaGoogleWallet } from "react-icons/fa";
-import { PiHandWithdrawFill } from "react-icons/pi";
-import { FaMoneyBills } from "react-icons/fa6";
-import { GiWallet, GiMoneyStack } from "react-icons/gi";
+import React, { useEffect, useState } from "react"; 
 import Hero1 from "./Hero1";
 import { GetUserDetails } from "../../Controllers/User/UserController";
-import { Loading3 } from "../Loading1";
-import { Link } from "react-router-dom";
+import { Loading3 } from "../Loading1"; 
 
-export default function Dashboard() {
-  const [user, setUser] = useState();
+export default function Dashboard() { 
   const [loading, setLoading] = useState(true);
 
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setUser(response[0]);
+      // setUser(response[0]);
       setLoading(false);
     }
   };
 
-  const data = [
-    {
-      id: 1,
-      title: "Direct Members Count",
-      value: user && user.direct_downline,
-      link: "/home?network=direct-downline",
-      icons: <BsFillPeopleFill size={20} />,
-    },
-    {
-      id: 2,
-      title: "My Investment",
-      value: user && `$${user.my_investment || 0}`,
-      link: "/home?investment=investment-history",
-      icons: <FaWallet size={20} />,
-    },
-    {
-      id: 3,
-      title: "Total Withdrawal",
-      value: user && `$${user.withdrawal || 0}`,
-      link: "/home?money=withdrawal-history",
-      icons: <PiHandWithdrawFill size={24} />,
-    },
-    {
-      id: 3,
-      title: "Total Deposit",
-      value: user && `$${user.deposit || 0}`,
-      link: "/home?money=deposit-history",
-      icons: <PiHandWithdrawFill size={24} />,
-    },
-    {
-      id: 4,
-      title: "Total Members Downline",
-      value: user && user.my_downline,
-      link: "/home?network=downline-member",
-      icons: <FaGoogleWallet size={22} />,
-    },
-    {
-      id: 5,
-      title: "Direct Income",
-      value: user && `$${user?.reffer_to_amount || 0}`,
-      link: "",
-      icons: <FaMoneyBills size={24} />,
-    },
-    {
-      id: 6,
-      title: "ROI",
-      value: user && `$${user?.roi_income || 0}`,
-      link: "",
-      icons: <GiWallet size={24} />,
-    },
-    {
-      id: 7,
-      title: "Matching Income",
-      value: user && `$${user?.matching_income || 0}`,
-      link: "",
-      icons: <GiMoneyStack size={24} />,
-    },
-    {
-      id: 3,
-      title: "Total Business",
-      value: "$0",
-      link: "",
-      icons: <PiHandWithdrawFill size={24} />,
-    },
-  ];
+  
 
   useEffect(() => {
     userDataGet();

@@ -21,35 +21,19 @@ const VerifyPin = ({ onclose2, successFunction }) => {
       return;
     }
     try {
-      const response = await PinVerification(pin);
-      if (response.status) {
-        setLoading(false);
-        toast.success("Verification Success !", {
-          position: "bottom-right",
-        });
-        successFunction(pin);
-        setTimeout(() => {
-          onclose2();
-        }, 1000);
-      } else {
-        toast.error("Please Try Again.", {
-          position: "bottom-right",
-        });
-        setLoading(false);
-        setPin("");
-      }
+      await PinVerification(pin);
+
+      setLoading(false);
+      toast.success("Verification Success !", {
+        position: "bottom-right",
+      });
+      successFunction(pin);
+      setTimeout(() => {
+        onclose2();
+      }, 1000);
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(`${error.response.data.message}`, {
-          position: "bottom-right",
-        });
-        setLoading(false);
-      } else {
-        toast.error("Server Error", {
-          position: "bottom-right",
-        });
-        setLoading(false);
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
+      setLoading(false);
     }
   };
 

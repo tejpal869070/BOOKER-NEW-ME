@@ -222,7 +222,7 @@ export default function DragonTower() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setTotalBalance(Number(response[0].color_wallet_balnace));
+      setTotalBalance(Number(response[0].game_wallet));
       setUser(response[0]);
     } else {
       window.location.href = "/";

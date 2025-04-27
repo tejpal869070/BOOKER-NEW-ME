@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
 import bg1 from "../../assets/photos/stadium2.jpg";
 import {
@@ -24,66 +25,38 @@ export default function OtpVerify({ goBack, formData, recivedOtp }) {
       return;
     }
     try {
-      const response = await VerifyOtp({
+      await VerifyOtp({
         email: formData.email,
         otp: otp,
       });
-      if (response.status === true) {
-        formData.token = response.token;
-        const regsiterResponse = await userRegistration(formData);
-        if (regsiterResponse.status === true) {
-          setOtpVerifying(false);
-          toast.success("Registration Success!", {
-            position: "top-center",
-          });
-          setTimeout(function () {
-            window.location.href = "/login";
-          }, 1500);
-        } else {
-          toast.error("Something went wrong !", {
-            position: "top-center",
-          });
-          setOtpVerifying(false);
-        }
-      } else {
-        toast.error("Incorrect OTP !", {
+
+      try {
+        await userRegistration(formData);
+        setOtpVerifying(false);
+        toast.success("Registration Success!", {
           position: "top-center",
         });
+        setTimeout(function () {
+          window.location.href = "/login";
+        }, 1500);
+      } catch (error) {
+        toast.error(error?.response?.data?.message || "Internal Server Error !")
         setOtpVerifying(false);
       }
     } catch (error) {
-      if (error.response.status === 400) {
-        toast.error("Incorrect OTP !", {
-          position: "top-center",
-        });
-        setOtpVerifying(false);
-        return;
-      } else {
-        toast.error("Something went wrong !", {
-          position: "top-center",
-        });
-        setOtpVerifying(false);
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
+      setOtpVerifying(false);
     }
   };
 
   const resendOtp = async () => {
     setOtpSending(true);
     try {
-      const response = await SendOtp(formData);
-      if (response.status) {
-        setShowOtp(response.data[0].otp);
-        setOtpSending(false);
-      } else {
-        toast.error("Something went wrong !", {
-          position: "top-center",
-        });
-        setOtpSending(false);
-      }
+      const otpResponse = await SendOtp(formData);
+      setShowOtp(otpResponse?.otp);
+      setOtpSending(false);
     } catch (error) {
-      toast.error("Something went wrong !", {
-        position: "top-center",
-      });
+      toast.error(error?.response?.data?.otp || "Internal Server Error !");
       setOtpSending(false);
     }
   };
@@ -107,7 +80,9 @@ export default function OtpVerify({ goBack, formData, recivedOtp }) {
             <h1 className="text-2xl font-semibold text-gray-200 mb-2">
               Verify OTP
             </h1>
-            <p className="text-sm font-semibold text-gray-200 text-italic">Your OTP is {showOtp}</p>
+            <p className="text-sm font-semibold text-gray-200 text-italic">
+              Your OTP is {showOtp}
+            </p>
           </div>
           <div className="flex justify-center items-center flex-col m-auto">
             <OtpInput

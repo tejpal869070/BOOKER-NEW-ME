@@ -4,6 +4,8 @@ import CryptoJS from "crypto-js";
 
 var EncodedMobile = btoa(JSON.stringify(sessionStorage.getItem("mobile")));
 var mobile = sessionStorage.getItem("mobile");
+var email = sessionStorage.getItem("email");
+
 var bearerToken = sessionStorage.getItem("token");
 
 export const DecodeString = async (str) => {
@@ -160,80 +162,70 @@ export const AddNewColorGameBet = async (formData) => {
 };
 
 export const MainGameWalletMoneyTransfer = async (formData, pin) => {
-  try {
-    const postData = {
-      mobile: mobile,
-      pin: pin,
-      amount: formData.amount,
-      type: formData.type,
-    };
+  const postData = {
+    email: email,
+    pin: pin,
+    amount: formData.amount,
+    type: formData.type,
+  };
 
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    };
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
 
-    const response = await axios.post(
-      `${API.url}user/color-money-transfer`,
-      postData,
-      axiosConfig
-    );
+  const response = await axios.post(
+    `${API.url}inter-wallet-money-transfer`,
+    postData,
+    axiosConfig
+  );
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  return response.data;
 };
 
 export const MinesGameUpdateWallet = async (formData) => {
-  try {
-    const amount = formData.amount;
-    const type = formData.type;
-    const game_type = formData.game_type;
-    const uid = formData.uid;
-    const details = formData.details || {};
-    const timestampResponse = await GetServerCurrentTime();
-    const date = timestampResponse;
-    const timestamp = new Date(date).getTime();
+  const amount = formData.amount;
+  const type = formData.type;
+  const game_type = formData.game_type; 
+  const details = formData.details || {};
+  // const timestampResponse = await GetServerCurrentTime();
+  // const date = timestampResponse;
+  // const timestamp = new Date(date).getTime();
 
-    const data = {
-      amount,
-      type,
-      game_type,
-      uid,
-      timestamp,
-      details,
-    };
+  const data = {
+    amount,
+    type,
+    game_type, 
+    // timestamp,
+    details,
+  };
 
-    const secretKey = process.env.REACT_APP_WALLET_UPDATE_KEY;
+  const secretKey = process.env.REACT_APP_WALLET_UPDATE_KEY;
 
-    const encodedData = CryptoJS.AES.encrypt(
-      JSON.stringify(data),
-      secretKey
-    ).toString();
+  const encodedData = CryptoJS.AES.encrypt(
+    JSON.stringify(data),
+    secretKey
+  ).toString();
 
-    const postData = {
-      mobile: mobile,
-      data: encodedData,
-    };
+  const postData = {
+    email: email,
+    data: encodedData,
+  };
 
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    };
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
 
-    const response = await axios.post(
-      `${API.url}user/add-balance-update`,
-      postData,
-      axiosConfig
-    );
+  const response = await axios.post(
+    `${API.url}deduct-game-wallet`,
+    postData,
+    axiosConfig
+  );
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  return response.data;
 };
 
 export const GetServerCurrentTime = async () => {

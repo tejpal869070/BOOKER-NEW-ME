@@ -1,29 +1,23 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { CheckToken } from "./AuthController";
-import { Loading1, Loading3 } from "../../Componentes/Loading1";
+import { Loading3 } from "../../Componentes/Loading1";
 
 export const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkToken = async () => {
-      const mobile = sessionStorage.getItem("mobile");
+      const email = sessionStorage.getItem("email");
       const token = sessionStorage.getItem("token");
 
-      if (!token || !mobile) {
-        // Redirect to login page without a full page reload
+      if (!token || !email) {
         return (window.location.href = "/login");
       }
 
       try {
-        const response = await CheckToken();
-        if (response.status !== true) {
-          // Redirect to login page without a full page reload
-          return (window.location.href = "/login");
-        }
+        await CheckToken();
         setIsAuthenticated(true);
       } catch (error) {
-        // Redirect to login page on error without a full page reload
         return (window.location.href = "/login");
       }
     };

@@ -1,13 +1,14 @@
 import axios from "axios";
 import { API } from "../Api";
 
-var mobile = sessionStorage.getItem("mobile");
+var email = sessionStorage.getItem("email");
 var bearerToken = sessionStorage.getItem("token");
+var mobile = "8690708302";
 
 export const GetUserDetails = async () => {
   try {
     const postData = {
-      mobile: mobile,
+      email: email,
     };
 
     const axiosConfig = {
@@ -17,20 +18,14 @@ export const GetUserDetails = async () => {
     };
 
     const response = await axios.post(
-      `${API.url}user/user-details`,
+      `${API.url}get-user-details`,
       postData,
       axiosConfig
     );
-
-    if (response?.data?.status) {
-      return response?.data?.data;
-    } else {
-      return null;
-    }
+    return response;
   } catch (error) {
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("mobile");
-    sessionStorage.removeItem("userDetails");
+    sessionStorage.removeItem("email");
     window.location.href = "/home";
     return null;
   }
@@ -112,7 +107,7 @@ export const GetPaymentMethod = async () => {
 
 export const CreateAccountPin = async (pin) => {
   const postData = {
-    mobile: mobile,
+    email: email,
     pin: pin,
   };
 
@@ -121,16 +116,13 @@ export const CreateAccountPin = async (pin) => {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}user/create-pin`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    return error;
-  }
+
+  const response = await axios.post(
+    `${API.url}create-pin`,
+    postData,
+    axiosConfig
+  );
+  return response;
 };
 
 export const GetUserPaymentHistory = async () => {
@@ -276,12 +268,10 @@ export const AddWithdrawalRequest = async (pin, amount) => {
 
 export const AddCryptoWithdrawalRequest = async (formData, pin) => {
   const postData = {
-    mobile: mobile,
+    email: email,
     amount: formData.amount,
     pin: pin,
-    address: formData.address,
-    price_at_time: formData.price_at_time,
-    currency: formData.currency,
+    withdrawal_address: formData.address,
   };
 
   const axiosConfig = {
@@ -289,16 +279,12 @@ export const AddCryptoWithdrawalRequest = async (formData, pin) => {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}user/add-usdt-withdrawal-request`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axios.post(
+    `${API.url}add-withdrawal-request`,
+    postData,
+    axiosConfig
+  );
+  return response;
 };
 
 export const RemoveWithdrawalRequest = async (id) => {
@@ -328,12 +314,10 @@ export const AddCryptoDepositRequest = async (formData) => {
   const postData = new FormData();
 
   postData.append("amount", formData.amount);
-  postData.append("transection_id", formData.transection_id);
+  postData.append("transection_hash", formData.transection_id);
   postData.append("image", formData.image);
-  postData.append("deposit_id", formData.deposit_id);
-  postData.append("price_at_time", formData.price_at_that_time);
-  postData.append("mobile", mobile);
-  postData.append("currency", formData.currency);
+  postData.append("deposit_to", formData.deposit_to);
+  postData.append("email", email);
 
   const axiosConfig = {
     headers: {
@@ -342,7 +326,7 @@ export const AddCryptoDepositRequest = async (formData) => {
   };
   try {
     const response = await axios.post(
-      `${API.url}user/deposit-usdt-request`,
+      `${API.url}add-deposit-request`,
       postData,
       axiosConfig
     );

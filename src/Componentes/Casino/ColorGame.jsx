@@ -68,7 +68,7 @@ export default function ColorGame() {
     if (id === 1) {
       setAmountHave(user.wallet_balance);
     } else {
-      setAmountHave(user.color_wallet_balnace);
+      setAmountHave(user.game_wallet);
     }
   };
 
@@ -175,7 +175,7 @@ export default function ColorGame() {
         <p className="relative " href="#">
           <p className="fold-bold border-2 border-black dark:border-gray-400 relative z-[2] inline-block h-full w-full rounded  bg-indigo-100 dark:bg-indigo-100 text-gray-700 px-3 py-1 text-base font-bold text-black transition duration-100  ">
             <RiColorFilterFill size={28} color="black" />
-            Game Balance : ${Number(user.color_wallet_balnace).toFixed(2)}
+            Game Balance : ${Number(user.game_wallet).toFixed(2)}
           </p>
           <div className="absolute w-full h-full bg-black dark:bg-gray-200 animate-pulse animate-duration-1000 top-1 left-1 z-[1] rounded " />
         </p>
@@ -187,7 +187,7 @@ export default function ColorGame() {
             <RiColorFilterFill size={28} color="black" />
             Game Balance : <br />{" "}
             <p className="text-xl">
-              {Number(user.color_wallet_balnace).toFixed(2)}
+              {Number(user.game_wallet).toFixed(2)}
             </p>
           </p>
         </p>
@@ -258,7 +258,7 @@ export default function ColorGame() {
                 {" "}
                 ${type === 1
                   ? Number(user.wallet_balance).toFixed(2)
-                  : Number(user.color_wallet_balnace).toFixed(2)}
+                  : Number(user.game_wallet).toFixed(2)}
               </span>
             </p>{" "}
             <div className="max-w-sm mt-4">

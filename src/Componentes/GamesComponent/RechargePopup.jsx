@@ -83,7 +83,7 @@ export const FlashPopup = ({ handleClose }) => {
         <p className="text-center mt-4  text-xl md:text-2xl font-bold">
           Game Balance :{" "}
           <span className="text-[#169b16] text-2xl">
-            ${user?.color_wallet_balnace}
+            ${user?.game_wallet}
           </span>
         </p>
         <div
@@ -133,7 +133,7 @@ export const FlashPopup = ({ handleClose }) => {
               {"  "}
               {"  "}
               <span className="text-lg font-bold">
-                $  {type === 1 ? Number(user.wallet_balance).toFixed(2) : Number(user.color_wallet_balnace).toFixed(2)}
+                $  {type === 1 ? Number(user.wallet_balance).toFixed(2) : Number(user.game_wallet).toFixed(2)}
               </span>
             </p>{" "}
             <div className="max-w-sm mt-4">

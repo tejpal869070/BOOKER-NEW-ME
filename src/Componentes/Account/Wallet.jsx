@@ -47,7 +47,7 @@ export default function Wallet() {
     if (id === 1) {
       setAmountHave(user.wallet_balance);
     } else {
-      setAmountHave(user.color_wallet_balnace);
+      setAmountHave(user.game_wallet);
     }
   };
 
@@ -131,7 +131,7 @@ export default function Wallet() {
                 {user &&
                   (
                     Number(user.wallet_balance) +
-                    Number(user.color_wallet_balnace)
+                    Number(user.game_wallet)
                   ).toFixed(2)}
               </p>
               <p className="text-center text-xs font-semibold italic  text-gray-900 -mt-1 pb-4  ">
@@ -149,7 +149,7 @@ export default function Wallet() {
                 </div>
                 <div className="w-1/2 rounded-t-xl py-1 flex flex-col items-center justify-center  ">
                   <p className="font-semibold text-lg text-[#d8ff00]">
-                    ${user && Number(user.color_wallet_balnace).toFixed(2)}
+                    ${user && Number(user.game_wallet).toFixed(2)}
                   </p>
                   <p className="text-center text-xs font-semibold   text-gray-900     ">
                     Game Wallet
@@ -256,7 +256,7 @@ export default function Wallet() {
                   ${" "}
                   {type === 1
                     ? Number(user.wallet_balance).toFixed(2)
-                    : Number(user.color_wallet_balnace).toFixed(2)}
+                    : Number(user.game_wallet).toFixed(2)}
                 </span>
               </p>{" "}
               <div className="max-w-sm mt-4">
