@@ -40,33 +40,25 @@ export default function WithdrawalHistory() {
     });
     if (result.isConfirmed) {
       try {
-        const response = await RemoveWithdrawalRequest(id);
-        if (response.status) {
-          toast.success("Withdrawal Request Cancelled", {
-            position: "top-center",
-          });
-          await GetPaymentHistory();
-        }
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Something went wrong";
-        toast.error(errorMessage, {
+        await RemoveWithdrawalRequest(id);
+        toast.success("Withdrawal Request Cancelled", {
           position: "top-center",
         });
+        await GetPaymentHistory();
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message || "Internal Server Error !"
+        );
       }
     }
   };
 
   const GetPaymentHistory = async () => {
-    const response = await GetUserPaymentHistory();
-    if (response) {
-      setData(
-        response
-          .reverse()
-          .filter(
-            (item) => item.payment_type === "Withdrawal" || item.image === null
-          )
-      );
+    const type = "Withdrawal";
+    const response = await GetUserPaymentHistory(type);
+    console.log(response.data);
+    if (response.data) {
+      setData(response.data.reverse());
     } else {
       setData([]);
     }
@@ -171,30 +163,29 @@ export default function WithdrawalHistory() {
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap  dark:text-white"
                         >
-                          {item.txtid}
+                          {item.transection_id}
                         </th>
                         <td className="whitespace-nowrap px-4 py-4">
-                          {item.currency === null ? "$ " : ""}
-                          {item.amount} {item.currency}
+                          ${item.amount}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 ">
-                          {item.status}
+                          {item.status === "P" ? "Pending" : item.status === "C" ? "Cancelled" : item.status === "IP" ? "Inprocess" : item.status === "R" ? "Rejected" : ""}
                         </td>
                         <td className="whitespace-nowrap flex items-center gap-1 px-6 py-4 ">
-                          {item.cypto.slice(0, 8)}.....
-                          {item.cypto.slice(-4)}
+                          {item.withdrawal_address.slice(0, 8)}.....
+                          {item.withdrawal_address.slice(-4)}
                           <CopyToClipboard
-                            text={item.cypto}
+                            text={item.withdrawal_address}
                             onCopy={handleCopy}
                           >
                             <FaCopy className="cursor-pointer  " />
                           </CopyToClipboard>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 hidden md:table-cell">
-                          {item.date.split("T")[0]}
+                          {item.created_at.split("T")[0]}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 flex justify-left items-center gap-2">
-                          {item.status === "Pending" && (
+                          {item.status === "P" && (
                             <MdCancel
                               size={20}
                               className="cursor-pointer text-red-500"
@@ -214,32 +205,29 @@ export default function WithdrawalHistory() {
                       <div className="rounded  shadow-lg bg-gray-800 p-3 mb-4">
                         <section className="border-b-[0.5px] border-gray-600 pb-2  flex justify-between items-center font-semibold  ">
                           <p className="px-2 bg-indigo-500 inline text-gray-200 rounded py-1">
-                            {item.payment_type === "USDT"
-                              ? "Crypto"
-                              : item.type}
+                            USDT Withdrawal
                           </p>
                           <p
                             className={` ${
-                              item.status === "Cancelled"
+                              item.status === "C"
                                 ? "text-red-500"
                                 : "text-green-500"
                             }`}
                           >
-                            {item.status}
+                            {item.status === "P" ? "Pending" : item.status === "C" ? "Cancelled" : item.status === "IP" ? "Inprocess" : item.status === "R" ? "Rejected" : ""}
                           </p>
                         </section>
                         <div className="pt-2 font-thin flex flex-col gap-1">
                           <section className="flex justify-between items-center font-bold  ">
                             <p className="text-gray-400 font-normal">Amount</p>
-                            <p className="text-[#FEAA57]">
-                              {item.type === "USDT" ? "$ " : "$ "}
+                            <p className="text-[#FEAA57]"> 
                               {item.amount}
                             </p>
                           </section>
                           <section className="flex justify-between items-center font-bold  ">
                             <p className="text-gray-400 font-normal">Time</p>
                             <p className="text-gray-200 font-normal">
-                              {item.date.split("T")[0]}
+                              {item.created_at.split("T")[0]}
                             </p>
                           </section>
                           <section className="flex justify-between items-center font-bold  ">
@@ -247,10 +235,10 @@ export default function WithdrawalHistory() {
                               Withdrawal To
                             </p>
                             <p className="text-gray-200 font-normal flex items-center gap-1">
-                              {item.cypto.slice(0, 8)}.....
-                              {item.cypto.slice(-4)}
+                              {item.withdrawal_address.slice(0, 8)}.....
+                              {item.withdrawal_address.slice(-4)}
                               <CopyToClipboard
-                                text={item?.cypto}
+                                text={item?.withdrawal_address}
                                 onCopy={handleCopy}
                               >
                                 <FaCopy className="cursor-pointer  " />
@@ -262,10 +250,10 @@ export default function WithdrawalHistory() {
                               Transection Id
                             </p>
                             <p className="text-gray-200 font-normal flex items-center gap-1">
-                              {item.txtid}
+                              {item.transection_id}
                             </p>
                           </section>
-                          {item.status === "Cancelled" && (
+                          {item.status === "C" && (
                             <section className="flex justify-between font-bold">
                               <p className="text-gray-400 font-normal">
                                 Reason
@@ -275,7 +263,7 @@ export default function WithdrawalHistory() {
                               </p>
                             </section>
                           )}
-                          {item.status === "Pending" ? (
+                          {item.status === "P" ? (
                             <section className="flex justify-between items-center font-bold  ">
                               <p
                                 className="text-gray-800  w-full text-center py-2 rounded bg-red-400"

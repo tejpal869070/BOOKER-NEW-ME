@@ -125,30 +125,23 @@ export const CreateAccountPin = async (pin) => {
   return response;
 };
 
-export const GetUserPaymentHistory = async () => {
-  try {
-    const postData = {
-      mobile: mobile,
-    };
+export const GetUserPaymentHistory = async (type) => {
+  const postData = {
+    email: email,
+    type: type,
+  };
 
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    };
-    const response = await axios.post(
-      `${API.url}user/get-deposit-request`,
-      postData,
-      axiosConfig
-    );
-    if (response?.data?.status) {
-      return response.data.data;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    return null;
-  }
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
+  const response = await axios.post(
+    `${API.url}get-user-deposit-history`,
+    postData,
+    axiosConfig
+  );
+  return response;
 };
 
 export const GetInvestmentPlans = async () => {
@@ -289,7 +282,7 @@ export const AddCryptoWithdrawalRequest = async (formData, pin) => {
 
 export const RemoveWithdrawalRequest = async (id) => {
   const postData = {
-    mobile: mobile,
+    email: email,
     id: id,
   };
 
@@ -298,16 +291,13 @@ export const RemoveWithdrawalRequest = async (id) => {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}user/decline-withdrawal-request`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+
+  const response = await axios.post(
+    `${API.url}cancel-withdrawal-request`,
+    postData,
+    axiosConfig
+  );
+  return response.data;
 };
 
 export const AddCryptoDepositRequest = async (formData) => {
@@ -338,32 +328,26 @@ export const AddCryptoDepositRequest = async (formData) => {
 
 export const GetAccountAllStatement = async (formData) => {
   const postData = {
-    mobile: mobile,
+    email: email,
   };
-  if (formData?.type) {
-    postData.type = formData.type;
-  }
 
   const axiosConfig = {
     headers: {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}user/get-statement`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+
+  const response = await axios.post(
+    `${API.url}get-statement`,
+    postData,
+    axiosConfig
+  );
+  return response.data;
 };
 
 export const GetGameWalletStatement = async (page) => {
   const postData = {
-    mobile: mobile,
+    email: email,
     page: page,
   };
 
@@ -372,16 +356,13 @@ export const GetGameWalletStatement = async (page) => {
       Authorization: `Bearer ${bearerToken}`,
     },
   };
-  try {
-    const response = await axios.post(
-      `${API.url}game/get-statement`,
-      postData,
-      axiosConfig
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+
+  const response = await axios.post(
+    `${API.url}get-all-game-statement`,
+    postData,
+    axiosConfig
+  );
+  return response.data;
 };
 
 export const SendRequestForChangeAccount = async (formData) => {

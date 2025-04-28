@@ -120,26 +120,13 @@ export default function ManualMode({ refreshHistoryFunction }) {
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Wheel";
-    formData.uid = user?.uid;
-    formData.details = {
-      multiplier: selectedColor?.profit,
-    };
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response && response.status) {
-        return true;
-      }
+      await MinesGameUpdateWallet(formData);
+      return true;
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-        return false;
-      } else {
-        toast.error("Server Error");
-        return false;
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
+      return false;
     }
   };
 
@@ -147,8 +134,8 @@ export default function ManualMode({ refreshHistoryFunction }) {
     const userDataGet = async () => {
       const response = await GetUserDetails();
       if (response !== null) {
-        setTotalBalance(Number(response[0].game_wallet));
-        setUser(response[0]);
+        setTotalBalance(Number(response?.data?.user?.game_wallet));
+        setUser(response?.data?.user);
       } else {
         window.location.href = "/";
       }
@@ -302,13 +289,16 @@ export default function ManualMode({ refreshHistoryFunction }) {
                   }}
                 >
                   {colors.map((item, index) => {
-                    const startAngle = gameType ==="high" ? 327.6 : (index * 360) / colors.length ;
+                    const startAngle =
+                      gameType === "high"
+                        ? 327.6
+                        : (index * 360) / colors.length;
                     const endAngle =
                       startAngle +
                       (gameType === "low" || gameType === "medium"
                         ? 360 / colors.length
                         : (item.area * 360) / 100);
-                    const midAngle = startAngle + (endAngle - startAngle) / 2; 
+                    const midAngle = startAngle + (endAngle - startAngle) / 2;
 
                     return (
                       <div
@@ -320,7 +310,7 @@ export default function ManualMode({ refreshHistoryFunction }) {
                           position: "absolute",
                           textAlign: "center",
                           whiteSpace: "nowrap",
-                          color : item.color,
+                          color: item.color,
                         }}
                       >
                         {item.profit}x

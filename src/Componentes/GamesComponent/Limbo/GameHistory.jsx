@@ -2,19 +2,22 @@ import React, { useEffect, useState } from "react";
 import { GetGameHistoryByType } from "../../../Controllers/User/GamesController";
 
 export default function GameHistory({ type, refreshHistory }) {
-  const [data, setData] = useState([]);
-  const [reverseData, setReverseData] = useState([]);
+  const [data, setData] = useState([]); 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await GetGameHistoryByType(type);
-      setData(response);
+      try {
+        const response = await GetGameHistoryByType(type);
+        console.log(response)
+        setData(response.data);
+      } catch (error) {
+        setData([]);
+        window.alert("Something Went Wrong !")
+      }
     };
     fetchData();
   }, [type, refreshHistory]);
 
-  useEffect(() => {
-    setReverseData(data);
-  }, [data]);
+  
 
   return (
     <div>
@@ -44,8 +47,7 @@ export default function GameHistory({ type, refreshHistory }) {
             </tr>
           </thead>
           <tbody>
-            {data &&
-              reverseData?.map((item, index) => (
+            {data && data?.reverse()?.map((item, index) => (
                 <tr
                   key={index}
                   class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
@@ -54,23 +56,23 @@ export default function GameHistory({ type, refreshHistory }) {
                     scope="row"
                     class="px-6 py-2 font-medium   whitespace-nowrap dark:text-gray-400 "
                   >
-                    {item.game_type}
+                    {item.game_name}
                   </th>
                   <td
                     class={`px-6 py-2 font-semibold ${
-                      item.bet_type === "Add Bet"
+                      item.description === "Add Bet"
                         ? "text-red-600"
                         : "text-green-600"
                     }`}
                   >
-                    ${" "}{Number(item.bet_balance).toFixed(2)}
+                    $ {Number(item.amount).toFixed(2)}
                   </td>
                   <td class="px-6 py-2">
                     {item.date.split("T")[0]}{" "}
                     {item.date.split("T")[1].split(".")[0]}
                   </td>
-                  <td class="px-6 py-2">{item.bet_type}</td>
-                  
+                  <td class="px-6 py-2">{item.description}</td>
+
                   {/* <td class="px-6 py-2">$2999</td> */}
                   {/* <td class="px-6 py-2">
                     <a

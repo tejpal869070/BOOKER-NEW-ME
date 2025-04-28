@@ -28,15 +28,9 @@ export default function AccountHistory() {
 
   const GetAllStatement = async () => {
     try {
-      const response = await GetAccountAllStatement();
-      if (response.status) {
-        setData(response.data);
-        setLoading(false);
-      } else {
-        window.alert("Something Went Wrong.");
-        setData([]);
-        setLoading(false);
-      }
+      const response = await GetAccountAllStatement(); 
+      setData(response?.filter((i) => i.description !== "Pending Deposit").reverse());
+      setLoading(false);
     } catch (error) {
       window.alert("Something Went Wrong.");
       setData([]);
@@ -137,7 +131,7 @@ export default function AccountHistory() {
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap  dark:text-white"
                       >
-                        {item.txtid}.
+                        {item.transection_id}.
                       </th>
                       <td className="whitespace-nowrap px-4 py-4">
                         {item.type}
@@ -149,7 +143,7 @@ export default function AccountHistory() {
                         $ {Number(item.amount).toFixed(4)}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        $ {item.balance}
+                        $ {item.updated_balance}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {item.type === "Matching-Income"
@@ -223,7 +217,7 @@ export default function AccountHistory() {
                   <section className="flex justify-between items-center font-bold  ">
                     <p className="text-gray-400 font-normal">Updated Balance</p>
                     <p className="text-gray-200 font-normal">
-                      ${Number(item.balance).toFixed(2)}
+                      ${Number(item.updated_balance).toFixed(2)}
                     </p>
                   </section>
                   <section className="flex justify-between items-center font-bold  ">

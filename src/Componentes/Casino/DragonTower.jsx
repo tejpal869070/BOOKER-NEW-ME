@@ -161,23 +161,13 @@ export default function DragonTower() {
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Dragon Tower";
-    formData.uid = user?.uid;
-    formData.details = { dragonCashout: profit };
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response && response.status) {
-        refreshHistoryFunction();
-        return true;
-      }
+      await MinesGameUpdateWallet(formData); 
+      refreshHistoryFunction();
+      return true;
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-      } else {
-        toast.error("Server Error");
-      }
+      toast.error(error.response.data.message || "Internal Server Error !");
       return false;
     } finally {
       userDataGet();
@@ -222,8 +212,8 @@ export default function DragonTower() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setTotalBalance(Number(response[0].game_wallet));
-      setUser(response[0]);
+      setTotalBalance(Number(response?.data?.user?.game_wallet));
+      setUser(response?.data?.user);
     } else {
       window.location.href = "/";
     }

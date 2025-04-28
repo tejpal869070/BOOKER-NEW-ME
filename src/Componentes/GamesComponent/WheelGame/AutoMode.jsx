@@ -203,23 +203,13 @@ export default function AutoMode({ refreshHistoryFunction }) {
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Wheel";
-    formData.uid = user?.uid;
-    formData.details = {
-      multiplier: selectedColor?.profit,
-    };
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response && response.status) {
-      }
+      await MinesGameUpdateWallet(formData);
+      return true;
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-      } else {
-        toast.error("Server Error");
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
+      return false;
     }
   };
 
@@ -227,8 +217,8 @@ export default function AutoMode({ refreshHistoryFunction }) {
     const userDataGet = async () => {
       const response = await GetUserDetails();
       if (response !== null) {
-        const newBalance = Number(response[0].game_wallet);
-        setUser(response[0]);
+        const newBalance = Number(response?.data?.user?.game_wallet);
+        setUser(response?.data?.user);
         setTotalBalance(newBalance);
         setStartingBalance(newBalance);
       } else {

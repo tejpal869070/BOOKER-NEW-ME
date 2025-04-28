@@ -207,23 +207,12 @@ export default function Limbo() {
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Limbo";
-    formData.uid = user?.uid;
-    formData.details = { limboTarget: target };
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response && response.status) {
-      }
+      await MinesGameUpdateWallet(formData);
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-        stopAutoBet();
-      } else {
-        toast.error("Server Error");
-        stopAutoBet();
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
+      return false;
     } finally {
       userDataGet();
     }
@@ -237,9 +226,9 @@ export default function Limbo() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setTotalBalance(Number(response[0].game_wallet));
-      setUser(response[0]);
-      const newBalance = Number(response[0].game_wallet);
+      setTotalBalance(Number(response?.data?.user?.game_wallet));
+      setUser(response?.data?.user);
+      const newBalance = Number(response?.data?.user?.game_wallet);
       setStartingBalance(newBalance);
     } else {
       window.location.href = "/";
@@ -595,7 +584,7 @@ export default function Limbo() {
         </div>
       </div>
       <div className="m-auto mt-6  max-w-[421px] md:max-w-[500px] lg:max-w-5xl">
-        <GameHistory type={"limbo"} refreshHistory={refreshHistory} />{" "}
+        <GameHistory type={"Limbo"} refreshHistory={refreshHistory} />{" "}
       </div>
 
       {isGraph && (

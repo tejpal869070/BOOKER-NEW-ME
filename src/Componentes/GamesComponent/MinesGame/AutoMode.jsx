@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { mines } from "../../../assets/Data/GamesData";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { minesProfitTable } from "../../../assets/Data/MinesData";
 import { GetUserDetails } from "../../../Controllers/User/UserController";
 import { AiOutlineAreaChart } from "react-icons/ai";
@@ -54,8 +55,8 @@ export default function AutoMode({
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      const newBalance = Number(response[0].game_wallet);
-      setUser(response[0]);
+      const newBalance = Number(response?.data?.user?.game_wallet);
+      setUser(response?.data?.user);
       setTotalBalance(newBalance);
       setStartingBalance(newBalance);
     } else {
@@ -68,21 +69,12 @@ export default function AutoMode({
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Mines";
-    formData.uid = user?.uid;
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response.status) {
-        refreshHistoryFunction();
-      }
+      await MinesGameUpdateWallet(formData); 
+      refreshHistoryFunction();
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-      } else {
-        toast.error("Server Error");
-      }
+      toast.error(error?.response?.data?.message || "Internal Server Error !");
     }
   };
 
@@ -271,7 +263,7 @@ export default function AutoMode({
     };
 
     startBetting();
-     toast.success("Bet Placed. Game start", { position: "top-center" });
+    toast.success("Bet Placed. Game start", { position: "top-center" });
   };
 
   const stopAutoBet = () => {
@@ -354,7 +346,11 @@ export default function AutoMode({
                 disabled={isAutoBetStart}
                 key={index}
                 onClick={() => handleCardClick(item)}
-                className={`w-full h-16 flex justify-center items-center shadow-lg lg:h-28 rounded-xl ${  userSelectedIndex.includes(item.id) ? "bg-[#9000FF] border-b-4 border-[#7100C7]" : "bg-[#2f4553] border-b-4 border-[#213743]" }  `}
+                className={`w-full h-16 flex justify-center items-center shadow-lg lg:h-28 rounded-xl ${
+                  userSelectedIndex.includes(item.id)
+                    ? "bg-[#9000FF] border-b-4 border-[#7100C7]"
+                    : "bg-[#2f4553] border-b-4 border-[#213743]"
+                }  `}
               >
                 {isAllOpen ? (
                   diamndIndex.includes(item.id) ? (
@@ -416,8 +412,12 @@ export default function AutoMode({
       <ToastContainer />
       <div>
         <div className="flex justify-between dark:text-gray-200">
-          <p className="mt-3 lg:mt-2 lg:text-xs text-gray-200 font-medium">Bet Amount</p>
-          <p className="mt-3 lg:mt-2 lg:text-xs text-gray-200 font-medium">${Number(totlaBalance).toFixed(2)}</p>
+          <p className="mt-3 lg:mt-2 lg:text-xs text-gray-200 font-medium">
+            Bet Amount
+          </p>
+          <p className="mt-3 lg:mt-2 lg:text-xs text-gray-200 font-medium">
+            ${Number(totlaBalance).toFixed(2)}
+          </p>
         </div>
         <div className="flex relative items-center">
           <input

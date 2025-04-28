@@ -93,7 +93,7 @@ export default function MinesGame() {
         ></div>
       </div>
       <div className="m-auto mt-6  max-w-[421px] md:max-w-[500px] lg:max-w-5xl">
-        <GameHistory type={"mines"} refreshHistory={refreshHistory} />
+        <GameHistory type={"Mines"} refreshHistory={refreshHistory} />
       </div>
     </div>
   );

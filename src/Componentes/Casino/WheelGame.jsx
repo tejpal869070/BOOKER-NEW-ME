@@ -10,7 +10,7 @@ const WheelGame = () => {
 
   const refreshHistoryFunction = () => {
     setRefreshHistory((pre) => !pre);
-  };
+  }; 
 
   const location = useLocation();
   useEffect(() => {

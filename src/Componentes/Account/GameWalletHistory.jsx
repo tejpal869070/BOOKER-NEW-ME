@@ -41,14 +41,9 @@ export default function GameWalletHistory() {
   const GetAllStatement = async () => {
     try {
       const response = await GetGameWalletStatement(pageId);
-      if (response.status) {
-        setData(response.data);
-        setLoading(false);
-      } else {
-        window.alert("Something Went Wrong.");
-        setData([]);
-        setLoading(false);
-      }
+      console.log(response)
+      setData(response);
+      setLoading(false);
     } catch (error) {
       window.alert("Something Went Wrong.");
       setData([]);
@@ -83,6 +78,8 @@ export default function GameWalletHistory() {
       setFilteredData(filteredData);
     }
   }, [startDate, endDate, data]);
+
+  console.log(data)
 
   if (loading) {
     return (
@@ -141,7 +138,7 @@ export default function GameWalletHistory() {
                       </th>
                     </tr>
                   </thead>
-                  {filteredData.map((item, index) => (
+                  {data.map((item, index) => (
                     <tbody key={index}>
                       <tr
                         className={` text-black font-semibold dark:text-gray-200  border-b dark:border-gray-700 ${
@@ -154,7 +151,7 @@ export default function GameWalletHistory() {
                           scope="row"
                           className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap  dark:text-white"
                         >
-                          {item.txtid}.
+                          {item.transection_id}
                         </th>
                         {/* <td className="whitespace-nowrap px-4 py-2">{item.type}</td> */}
                         <td className="whitespace-nowrap px-6 py-2">
@@ -162,39 +159,39 @@ export default function GameWalletHistory() {
                         </td>
                         <td
                           className={`px-6 py-2 ${
-                            item.bet_type === "Win Bet" ||
+                            item.description === "Win Bet" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
-                              (item.bet_type === "win" ||
-                                item.bet_type === "bonus" ||
-                                item.bet_type === "spin" ||
-                                item.bet_type === "bet")) ||
+                              (item.description === "win" ||
+                                item.description === "bonus" ||
+                                item.description === "spin" ||
+                                item.description === "bet")) ||
                             (item.transaction_type === "debit" &&
-                              (item.bet_type === "cancel" ||
-                                item.bet_type === "partial_cancel"))
+                              (item.description === "cancel" ||
+                                item.description === "partial_cancel"))
                               ? "text-[green]"
                               : "text-red-600"
                           }`}
                         >
-                          {item.bet_type === "Win Bet" ||
+                          {item.description === "Win Bet" ||
                           item.game_type === "Received" ||
                           (item.transaction_type === "credit" &&
-                            (item.bet_type === "win" ||
-                              item.bet_type === "bonus" ||
-                              item.bet_type === "spin" ||
-                              item.bet_type === "bet")) ||
+                            (item.description === "win" ||
+                              item.description === "bonus" ||
+                              item.description === "spin" ||
+                              item.description === "bet")) ||
                           (item.transaction_type === "debit" &&
-                            (item.bet_type === "cancel" ||
-                              item.bet_type === "partial_cancel"))
+                            (item.description === "cancel" ||
+                              item.description === "partial_cancel"))
                             ? "+"
                             : "-"}
-                          {Number(item.bet_balance).toFixed(2)}
+                          {Number(item.amount).toFixed(2)}
                         </td>
                         <td className="whitespace-nowrap px-6 py-2">
-                           {Number(item.total_balance).toFixed(2)}
+                          {Number(item.updated_balance).toFixed(3)}
                         </td>
                         <td className="whitespace-nowrap px-6 py-2 flex justify-left items-center gap-2">
-                          {item.game_type}{" "}
+                          {item.game_name}{" "}
                           {item.game_type === "casino" && (
                             <FaRegEye
                               className="cursor-pointer"
@@ -206,7 +203,7 @@ export default function GameWalletHistory() {
                           )}
                         </td>
                         <td className="whitespace-nowrap px-6 py-2">
-                          {item.bet_type}
+                          {item.description}
                         </td>
                       </tr>
                       {isVisible && selectedIndex === index ? (
@@ -222,42 +219,42 @@ export default function GameWalletHistory() {
                   ))}
                 </table>
                 <div className="flex flex-col md:hidden pb-20">
-                  {filteredData &&
-                    filteredData?.map((item, index) => (
+                  {data &&
+                    data?.map((item, index) => (
                       <div className="rounded  shadow-lg bg-gray-800 p-3 mb-2">
                         <section className="border-b-[0.5px] border-gray-600 pb-2  flex justify-between items-center font-semibold  ">
                           <p className="px-2 bg-indigo-500 inline text-gray-200 rounded  py-0.5">
-                            {item.game_type}
+                            {item.game_name}
                           </p>
                           <p
                             className={`  ${
-                              item.bet_type === "Win Bet" ||
+                              item.description === "Win Bet" ||
                               item.game_type === "Received" ||
                               (item.transaction_type === "credit" &&
-                                (item.bet_type === "win" ||
-                                  item.bet_type === "bonus" ||
-                                  item.bet_type === "spin" ||
-                                  item.bet_type === "bet")) ||
+                                (item.description === "win" ||
+                                  item.description === "bonus" ||
+                                  item.description === "spin" ||
+                                  item.description === "bet")) ||
                               (item.transaction_type === "debit" &&
-                                (item.bet_type === "cancel" ||
-                                  item.bet_type === "partial_cancel"))
+                                (item.description === "cancel" ||
+                                  item.description === "partial_cancel"))
                                 ? "text-[green]"
                                 : "text-red-600"
                             }`}
                           >
-                            {item.bet_type === "Win Bet" ||
+                            {item.description === "Win Bet" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
-                              (item.bet_type === "win" ||
-                                item.bet_type === "bonus" ||
-                                item.bet_type === "spin" ||
-                                item.bet_type === "bet")) ||
+                              (item.description === "win" ||
+                                item.description === "bonus" ||
+                                item.description === "spin" ||
+                                item.description === "bet")) ||
                             (item.transaction_type === "debit" &&
-                              (item.bet_type === "cancel" ||
-                                item.bet_type === "partial_cancel"))
+                              (item.description === "cancel" ||
+                                item.description === "partial_cancel"))
                               ? "+"
                               : "-"}
-                            {Number(item.bet_balance).toFixed(2)}
+                            {Number(item.amount).toFixed(2)}
                           </p>
                         </section>
                         <div className="pt-2 font-thin flex flex-col gap-1">
@@ -266,7 +263,7 @@ export default function GameWalletHistory() {
                               Updated Balance
                             </p>
                             <p className="text-gray-200 font-normal">
-                             {Number(item.total_balance).toFixed(2)}
+                              {Number(item.updated_balance).toFixed(2)}
                             </p>
                           </section>
                           <section className="flex justify-between items-center font-bold  ">
@@ -274,7 +271,7 @@ export default function GameWalletHistory() {
                               Bet Type
                             </p>
                             <p className="text-gray-200 font-normal">
-                              {item.bet_type}
+                              {item.game_name}
                             </p>
                           </section>
                           <section className="flex justify-between items-center font-bold  ">
@@ -284,9 +281,11 @@ export default function GameWalletHistory() {
                             </p>
                           </section>
                           <section className="flex justify-between items-center font-bold  ">
-                            <p className="text-gray-400 font-normal">Transection Id</p>
+                            <p className="text-gray-400 font-normal">
+                              Transection Id
+                            </p>
                             <p className="text-gray-200 font-normal">
-                              {item.txtid}
+                              {item.transection_id}
                             </p>
                           </section>
                           {item.status === "Cancelled" && (

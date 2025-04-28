@@ -120,24 +120,13 @@ export default function CoinFlip() {
     formData.type = type;
     formData.amount = amount;
     formData.game_type = "Coin Flip";
-    formData.uid = user?.uid;
-    // formData.details = { limboTarget: target };
 
     try {
-      const response = await MinesGameUpdateWallet(formData);
-      if (response && response.status) {
-        return true;
-      }
+      await MinesGameUpdateWallet(formData);
+      return true;
     } catch (error) {
-      if (error?.response?.status === 302) {
-        toast.error(error.response.data.message, {
-          position: "top-center",
-        });
-      } else {
-        toast.error("Server Error", {
-          position: "top-center",
-        });
-      }
+      toast.error(error.response.data.message || "Internal Server Error !");
+      return false;
     } finally {
       userDataGet();
       refreshHistoryFunction();
@@ -151,8 +140,8 @@ export default function CoinFlip() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setUser(response[0]);
-      setTotalBalance(Number(response[0].game_wallet));
+      setUser(response?.data?.user);
+      setTotalBalance(Number(response?.data?.user?.game_wallet));
     } else {
       window.location.href = "/";
     }

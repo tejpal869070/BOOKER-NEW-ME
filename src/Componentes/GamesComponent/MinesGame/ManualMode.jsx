@@ -60,7 +60,7 @@ export default function ManualMode({
     formData.amount = amount;
     formData.game_type = "Mines"; 
 
-    try {
+    try { 
       await MinesGameUpdateWallet(formData);
       refreshHistoryFunction();
     } catch (error) {
@@ -191,8 +191,7 @@ export default function ManualMode({
       audio.play();
     }
   };
-
-  console.log(openedMines);
+ 
 
   const generateRandom = () => {
     const allRandomNumbers = new Set();

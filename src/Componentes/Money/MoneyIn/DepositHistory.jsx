@@ -24,20 +24,17 @@ export default function DepositHistory() {
   };
 
   const GetPaymentHistory = async () => {
-    const response = await GetUserPaymentHistory();
-    if (response !== null) {
-      setData(
-        response
-          .reverse()
-          .filter(
-            (item) => item.payment_type === "Deposit" || item.image !== null
-          )
-      );
+    const type = "Deposit"
+    try {
+      const response = await GetUserPaymentHistory(type); 
+      setData(response.data);
       setLoading(false);
-    } else {
+    } catch (error) {
       setData([]);
       setLoading(false);
     }
+    
+  
   };
 
   useEffect(() => {
@@ -61,7 +58,7 @@ export default function DepositHistory() {
     } else {
       // Filter data between startDate and endDate
       const filteredData = data.filter((item) => {
-        const itemDate = new Date(item.date);
+        const itemDate = new Date(item.created_at);
         const startDateObj = new Date(startDate);
         return itemDate >= startDateObj && itemDate <= endDateObj;
       });
@@ -134,18 +131,18 @@ export default function DepositHistory() {
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap  dark:text-white"
                       >
-                        {item.txtid}
+                        {item.transection_id}
                       </th>
                       <td className="whitespace-nowrap px-4 py-4">
                         ${item.amount}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 hidden md:table-cell ">
-                        {item.transaction_id}
+                        {item.transection_hash}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 hidden md:table-cell">
-                        {item.date?.split("T")[0]}
+                        {item.created_at?.split("T")[0]}
                         {" / "}
-                        {item.date?.split("T")[1]?.split(".")[0]}
+                        {item.created_at?.split("T")[1]?.split(".")[0]}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {item.status}
@@ -187,7 +184,7 @@ export default function DepositHistory() {
                   <section className="flex justify-between items-center font-bold  ">
                     <p className="text-gray-400 font-normal">Time</p>
                     <p className="text-gray-200 font-normal">
-                      {item.date.split("T")[0]}
+                      {item.created_at.split("T")[0]}
                     </p>
                   </section>
                   <section className="flex justify-between items-center font-bold  ">
