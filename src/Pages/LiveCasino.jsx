@@ -1,19 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ColorGame from "../Componentes/Casino/ColorGame";
-import Aviator from "../Componentes/Casino/Aviator";
-import MinesGame from "../Componentes/Casino/MinesGame"; 
+import MinesGame from "../Componentes/Casino/MinesGame";
 import WheelGame from "../Componentes/Casino/WheelGame";
-import LiveCasinoDashboard from "../Componentes/Casino/LiveCasinoDashboard";
-import CasinoLobby from "../Componentes/Casino/CasinoLobby";
 import Limbo from "../Componentes/Casino/Limbo";
 import DragonTower from "../Componentes/Casino/DragonTower";
 import GameLoading from "../Componentes/GameLoading";
 import CoinFlip from "../Componentes/Casino/CoinFlip";
+import { getAllGames } from "../Controllers/User/GamesController";
+import Match from "../Componentes/Casino/Match";
+import MatchDashboard from "../Componentes/Casino/MatchDashboard";
 
 export default function LiveCasino() {
   const location = useLocation();
   const [preload, setPreload] = useState(false);
+  const [gameData, setGameData] = useState([]);
   const [gameComponent, setGameComponent] = useState(null);
 
   // get path and query to display content in inner section
@@ -26,49 +26,77 @@ export default function LiveCasino() {
     return data;
   }, [location.search]);
 
+  // --------------------------
+  useEffect(() => {
+    const fatchGames = async () => {
+      try {
+        const response = await getAllGames();
+        setGameData(response?.data);
+      } catch (error) {
+        window.alert("Somthing Went Wrong !");
+      }
+    };
+
+    fatchGames();
+  }, []);
+  // --------------------------
+
   useEffect(() => {
     if (paramsData && paramsData.game) {
       setPreload(true);
       const timeoutId = setTimeout(() => {
         setPreload(false);
         const renderGameComponent = () => {
-          if (paramsData && paramsData.game === "color-game") {
-            setGameComponent(<ColorGame />);
-          } else if (paramsData && paramsData.game === "mines") {
+          if (
+            paramsData?.game === "mines" &&
+            gameData?.some((item) => item.game_name === "Mines")
+          ) {
             setGameComponent(<MinesGame />);
-          } else if (paramsData && paramsData.game === "wheel") {
+          } else if (
+            paramsData?.game === "wheel" &&
+            gameData?.some((item) => item.game_name === "Wheel")
+          ) {
             setGameComponent(<WheelGame />);
-          } else if (paramsData && paramsData.game === "casino") {
-            setGameComponent(<LiveCasinoDashboard />);
-          } else if (paramsData && paramsData.game === "limbo") {
+          } else if (
+            paramsData?.game === "limbo" &&
+            gameData?.some((item) => item.game_name === "Limbo")
+          ) {
             setGameComponent(<Limbo />);
-          } else if (paramsData && paramsData.game === "dragon-tower") {
+          } else if (
+            paramsData?.game === "dragon-tower" &&
+            gameData?.some((item) => item.game_name === "Dragon Tower")
+          ) {
             setGameComponent(<DragonTower />);
-          } else if (paramsData && paramsData.game === "casino-lobby") {
-            setGameComponent(<CasinoLobby />);
-          } else if (paramsData && paramsData.game === "aviator") {
-            setGameComponent(<Aviator />);
-          } else if (paramsData && paramsData.game === "coin-flip") {
+          } else if (
+            paramsData?.game === "coin-flip" &&
+            gameData?.some((item) => item.game_name === "Coin FLip")
+          ) {
             setGameComponent(<CoinFlip />);
+          } else if (paramsData?.game === "match-lobby") {
+            setGameComponent(<Match />);
+          }else if (paramsData?.game === "match") {
+            setGameComponent(<MatchDashboard />);
           } else {
-            setGameComponent(
-              <div>
-                <iframe
-                  src="https://www.crazygames.com/embed/ragdoll-archers"
-                  title="onloneGame"
-                  style={{ width: "80vw", height: "90vh" }}
-                  frameborder="0"
-                  allow="gamepad *;"
-                ></iframe>
-              </div>
-            );
+            setGameComponent(<Maintainance />);
           }
         };
         renderGameComponent();
       }, 1500);
       return () => clearTimeout(timeoutId);
     }
-  }, [paramsData]);
+  }, [paramsData, gameData]);
+
+  const Maintainance = () => {
+    return (
+      <div className=" w-[70vw] h-[60dvh] flex justify-center items-center">
+        <img
+          alt="amain"
+          className="w-80"
+          src={require("../assets/photos/under-maintenance.png")}
+        />
+      </div>
+    );
+  };
 
   return (
     <div>

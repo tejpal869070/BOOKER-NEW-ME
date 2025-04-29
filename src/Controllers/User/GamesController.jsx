@@ -256,3 +256,8 @@ export const GetGameHistoryByType = async (type) => {
   );
   return response;
 };
+
+export const getAllGames = async () => {
+  const response = await axios.post(`${API.url}user/get-games `);
+  return response;
+};

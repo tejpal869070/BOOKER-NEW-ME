@@ -1,11 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GetAllCasinoGames } from "../../Controllers/User/UserController";
+import { getAllGames } from "../../Controllers/User/GamesController";
+import { API } from "../../Controllers/Api";
 
 export default function Games() {
   const [games, setGames] = React.useState([]);
   const [selected, setSelected] = useState(1);
   const navigate = useNavigate();
+  const [gameData, setGameData] = useState([])
+
+
+  // --------------------------
+  useEffect(()=>{
+
+    const fatchGames =async()=>{
+      try {
+        const response = await getAllGames()
+        setGameData(response?.data)
+      } catch (error) {
+        window.alert("Somthing Went Wrong !")
+      }
+    }
+
+
+    fatchGames()
+  },[])
+  // --------------------------
 
   const formData = {};
   const handleCasinoSelect = async (item) => {
@@ -55,13 +76,13 @@ export default function Games() {
       <div className="border-4  md:border-0 border-[#f6d368]">
         {selected === 1 ? (
           <div className="flex flex-wrap justify-around md:justify-start md:gap-[1.3%]   px-1 py-3   ">
-            {gameData.map((item, index) => (
+            {gameData?.map((item, index) => (
               <Link
-                to={item.to}
+                to={item.game_url}
                 key={index}
                 className="w-[32%] md:w-[19%] lg:w-[15%] mb-4   bg-gray-300 rounded-md md:rounded-xl"
               >
-                <img alt="poster" src={item.image} className="rounded-xl" />
+                <img alt="poster" src={`${API.url}${item.image}`} className="rounded-xl" />
               </Link>
             ))}
           </div>
@@ -114,11 +135,11 @@ export default function Games() {
 }
 
 const gameData = [
-  {
-    id: 1,
-    image: require("../../assets/photos/colorgame1.png"),
-    to: { pathname: "/home", search: "?game=color-game" },
-  },
+  // {
+  //   id: 1,
+  //   image: require("../../assets/photos/colorgame1.png"),
+  //   to: { pathname: "/home", search: "?game=color-game" },
+  // },
   {
     id: 2,
     image: require("../../assets/photos/minesgme.png"),

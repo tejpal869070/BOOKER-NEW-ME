@@ -40,9 +40,8 @@ export default function GameWalletHistory() {
 
   const GetAllStatement = async () => {
     try {
-      const response = await GetGameWalletStatement(pageId);
-      console.log(response)
-      setData(response);
+      const response = await GetGameWalletStatement(pageId); 
+      setData(response?.reverse());
       setLoading(false);
     } catch (error) {
       window.alert("Something Went Wrong.");

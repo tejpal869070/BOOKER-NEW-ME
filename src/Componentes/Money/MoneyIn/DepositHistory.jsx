@@ -121,7 +121,7 @@ export default function DepositHistory() {
                 </tbody>
               ) : (
                 filteredData &&
-                filteredData.map((item, index) => (
+                filteredData?.reverse().map((item, index) => (
                   <tbody>
                     <tr
                       key={index}
@@ -145,7 +145,7 @@ export default function DepositHistory() {
                         {item.created_at?.split("T")[1]?.split(".")[0]}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.status}
+                        {item.status === "P" ? "Pending" :  item.status === "R" ? "Rejected" : item.status === "S" ? "SUCCESS" : ""}
                       </td>
                     </tr>
                   </tbody>

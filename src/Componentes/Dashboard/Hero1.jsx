@@ -115,9 +115,8 @@ export default function Hero1() {
     <div className="pb-6">
       <ToastContainer />
 
-      <div className="grid grid-cols-12 gap-4 w-full">
-        <div
-          className="relative   col-span-12 lg:col-span-6 xl:col-span-8 bg-opacity-10 bg-top bg-cover bg-left-bottom border-2 border-[#92a0fd] dark:border-gray-200 rounded-lg flex justify-between p-4"
+      <div className="grid grid-cols-10 gap-4 w-full">
+        <div className="relative   col-span-10 lg:col-span-5 xl:col-span-6 bg-opacity-10 bg-top bg-cover bg-left-bottom border-2 border-[#92a0fd] dark:border-gray-200 rounded-lg flex justify-between p-4"
           style={{ backgroundImage: `url(${bg1})` }}
         >
           <div className="z-[9]">
@@ -125,9 +124,9 @@ export default function Hero1() {
               Congratulations {userData && userData?.user_name}! 🎉
             </h1>
             <p className="text-sm mt-2 text-gray-100">
-              Joining: {userData && userData?.date?.split("T")[0]}
+              Joining: {userData && userData?.created_at?.split("T")[0]}
             </p>
-            <div className="flex flex-wrap   gap-4 mt-4 hidden md:flex">
+            {/* <div className="flex flex-wrap   gap-4 mt-4 hidden md:flex">
               <Link
                 className="relative"
                 to={{
@@ -164,12 +163,12 @@ export default function Hero1() {
                   VIP
                 </span>
               </Link>
-            </div>
+            </div> */}
           </div>
           <div className="absolute inset-0 bg-gradient-to-b rounded-lg from-black to-transparent opacity-100 z-1" />
         </div>
 
-        <div className="col-span-12 lg:col-span-6 xl:col-span-4 w-full rounded-lg hidden md:block">
+        <div className="col-span-10 lg:col-span-5 xl:col-span-4 w-full rounded-lg hidden md:block">
           <div className="grid grid-cols-12 gap-4 w-full">
             <div
               className=" col-span-12 rounded-lg  p-4 border-2 border-black"

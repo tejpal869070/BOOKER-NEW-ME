@@ -50,7 +50,7 @@ export default function Home() {
 
   const handleLogout = async () => {
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("mobile");
+    sessionStorage.removeItem("email");
     sessionStorage.removeItem("userDetails");
     window.location.href = "/";
   };
@@ -155,12 +155,12 @@ export default function Home() {
             >
               <GiReceiveMoney /> Withdrawal
             </Link>
-            <Link
+            {/* <Link
               to={"/home?investment=new-investment"}
               className="cursor-pointer flex justify-center items-center gap-2 px-2 py-0.5 text-sm font-semibold rounded-full bg-gray-200"
             >
               <BsSafe2Fill /> Investment
-            </Link>
+            </Link> */}
             <button
               onClick={async () => {
                 await userGet();
@@ -315,7 +315,7 @@ export default function Home() {
                 <span className="ms-3 dark:text-black">Dashboard</span>
               </Link>
             </li>
-            <li className="side-bar-list">
+            {/* <li className="side-bar-list">
               <Link
                 to={"/home?game=casino"}
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group  dark:text-black dark:hover:bg-gray-200 hover:text-center"
@@ -325,7 +325,7 @@ export default function Home() {
                   Live Casino
                 </span>
               </Link>
-            </li>
+            </li> */}
             <li className="side-bar-list">
               <button
                 type="button"
@@ -481,7 +481,7 @@ export default function Home() {
               </ul>
             </li>
 
-            <li className="side-bar-list">
+            {/* <li className="side-bar-list">
               <button
                 type="button"
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group  dark:text-black dark:hover:bg-gray-300 hover:text-center"
@@ -541,8 +541,8 @@ export default function Home() {
                   </Link>
                 </li>
               </ul>
-            </li>
-            <li className="side-bar-list">
+            </li> */}
+            {/* <li className="side-bar-list">
               <button
                 type="button"
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group  dark:text-black dark:hover:bg-gray-300 hover:text-center"
@@ -625,7 +625,7 @@ export default function Home() {
                   </Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             <li className="side-bar-list">
               <button
@@ -782,7 +782,7 @@ export default function Home() {
                 id="account-dropdown"
                 className=" hidden py-2 pl-2 list-disc	animate-fade-down animate-duration-500   space-y-2"
               >
-                <li className="ml-11">
+                {/* <li className="ml-11">
                   <Link
                     to={{ pathname: "/home", search: `?account=send-money` }}
                     className={`${dropdownClassList}`}
@@ -790,7 +790,7 @@ export default function Home() {
                   >
                     Send Money
                   </Link>
-                </li>
+                </li> */}
                 <li className="ml-11">
                   <Link
                     to={{ pathname: "/home", search: `?account=today-history` }}
@@ -839,7 +839,7 @@ export default function Home() {
               </ul>
             </li>
 
-            <li className="side-bar-list">
+            {/* <li className="side-bar-list">
               <button
                 type="button"
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group  dark:text-black dark:hover:bg-gray-300 hover:text-center"
@@ -919,7 +919,7 @@ export default function Home() {
                   </Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             <li className="bg-[#ffb2b2] rounded-lg">
               <div
@@ -1028,7 +1028,7 @@ export default function Home() {
 
       {/* Content */}
       <div className="bg-no-repeat bg-cover bg-fixed dark:bg-gray-900 m-auto">
-        <div className="p-2 md:p-8 sm:ml-64  pb-24 md:pt-24  max-w-7xl ">
+        <div className="p-2 md:p-8 sm:ml-64  pb-24 md:pt-24   ">
           <InnerSection />
         </div>
       </div>
