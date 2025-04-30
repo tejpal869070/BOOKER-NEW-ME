@@ -69,7 +69,7 @@ export default function LiveCasino() {
             setGameComponent(<DragonTower />);
           } else if (
             paramsData?.game === "coin-flip" &&
-            gameData?.some((item) => item.game_name === "Coin FLip")
+            gameData?.some((item) => item.game_name === "Coin Flip")
           ) {
             setGameComponent(<CoinFlip />);
           } else if (paramsData?.game === "match-lobby") {

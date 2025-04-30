@@ -261,3 +261,13 @@ export const getAllGames = async () => {
   const response = await axios.post(`${API.url}user/get-games `);
   return response;
 };
+
+export const getAllMatch = async () => {
+  const response = await axios.post(`${API.url}admin/get-all-match `);
+  return response;
+};
+
+export const getSingleMatchData = async (id) => {
+  const response = await axios.post(`${API.url}get-single-match-detail `, { id });
+  return response;
+};

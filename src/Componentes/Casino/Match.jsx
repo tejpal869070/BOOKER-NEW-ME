@@ -1,14 +1,61 @@
-import React from "react";
-import team1 from "../../assets/photos/rr.webp";
-import team2 from "../../assets/photos/rcb.png";
+import React, { useEffect, useState } from "react";
 import vsimg from "../../assets/photos/vs.png";
 import { MatchData } from "../../assets/Data/MatchData";
 import { CgMediaLive } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { getAllMatch } from "../../Controllers/User/GamesController";
+import { API } from "../../Controllers/Api";
+import { Loading4 } from "../Loading1";
 
 export default function Match() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const FormatDate = ({ date }) => {
+    // Function to format the date
+    const formatDate = (dateStr) => {
+      const dateObj = new Date(dateStr);
+      return dateObj
+        .toLocaleString("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+        .replace(",", "")
+        .replace(":", ".");
+    };
+
+    return <p>{formatDate(date)}</p>;
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllMatch();
+        setData(response?.data);
+        setLoading(false)
+      } catch (error) {
+        toast.error("Something Went Wrong !");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center ">
+        <Loading4 />
+      </div>
+    );
+  }
+
   return (
     <div className="  m-auto max-w-6l m-auto min-h-screen">
+      <ToastContainer />
       <div class="w-full   flex items-center justify-center min-h-full p-2">
         <div class="container max-w-6xl">
           <div class="  rounded-xl shadow-md overflow-hidden ">
@@ -58,7 +105,7 @@ export default function Match() {
 
             {/* matches */}
             <div class="overflow-x-auto mt-10 ">
-              {MatchData?.map((item, index) => (
+              {data?.map((item, index) => (
                 <table
                   key={index}
                   class="min-w-full divide-y divide-gray-900 rounded-xl overflow-hidden mb-4 animate-fade-up animate-once animate-duration-[800ms]"
@@ -70,7 +117,7 @@ export default function Match() {
                           <div class=" w-20  ">
                             <img
                               class=" w-40 rounded-full "
-                              src={item.teams[0].image}
+                              src={`${API.url}assets/${item.teams[0].image}`}
                               alt=""
                             />
                           </div>
@@ -89,7 +136,7 @@ export default function Match() {
                           <div class=" w-20  ">
                             <img
                               class=" w-40 rounded-full "
-                              src={item.teams[1].image}
+                              src={`${API.url}assets/${item.teams[1].image}`}
                               alt=""
                             />
                           </div>
@@ -104,7 +151,7 @@ export default function Match() {
                         <div class="text-sm text-gray-300 font-semibold">
                           <p className="italic underline ">Match Time</p>
                           <p className="text-lg">
-                            {item.match_time === "Live" ? (
+                            {item.status === "LIVE" ? (
                               <span className="flex items-center gap-2">
                                 <CgMediaLive
                                   color="green"
@@ -114,11 +161,8 @@ export default function Match() {
                                 Live
                               </span>
                             ) : (
-                              item.match_time.split("T")[0]
+                              <FormatDate date={item.match_time} />
                             )}
-                          </p>
-                          <p className="text-lg">
-                            {item.match_time.split("T")[1]}{" "}
                           </p>
                         </div>
                       </td>
