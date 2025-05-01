@@ -268,6 +268,47 @@ export const getAllMatch = async () => {
 };
 
 export const getSingleMatchData = async (id) => {
-  const response = await axios.post(`${API.url}get-single-match-detail `, { id });
+  const response = await axios.post(`${API.url}get-single-match-detail `, {
+    id,
+  });
+  return response;
+};
+
+export const addMatchBet = async (formData) => {
+  const data = {
+    email: email,
+    match_id: formData.match_id,
+    bet_type: formData.type,
+    bet_value: formData.type === "L" ? formData.lastDigit : formData.exectRun,
+    amount: formData.amount,
+    section_id: formData.section_id,
+  };
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
+  const response = await axios.post(
+    `${API.url}add-match-bet `,
+    data,
+    axiosConfig
+  );
+  return response;
+};
+
+export const getMyMatchBets = async () => {
+  const data = {
+    email : email
+  };
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
+  const response = await axios.post(
+    `${API.url}my-match-bets `,
+    data,
+    axiosConfig
+  );
   return response;
 };

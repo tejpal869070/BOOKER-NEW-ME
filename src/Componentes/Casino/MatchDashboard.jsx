@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import playerIcon from "../../assets/photos/cricket-player-icon.png";
 import { getSingleMatchData } from "../../Controllers/User/GamesController";
 import { API } from "../../Controllers/Api";
+import MatchGamePopup from "../GamesComponent/MatchGamePopup";
 
 export default function MatchDashboard() {
   const id = new URL(window.location.href).searchParams.get("id");
@@ -15,7 +16,11 @@ export default function MatchDashboard() {
   const [selectedSection, setSelectedSection] = useState(null);
   const [isExectOpen, setExectOpen] = useState(false);
 
+  const [isBetPopupOpen, setBetPopupOpen] = useState(false);
+
   const [exectRun, setExectRun] = useState(Number);
+
+  const [formData, setFormData] = useState({});
 
   // bet function
   const handleLastBet = (match_id, section_id, type, lastDigit) => {
@@ -32,12 +37,9 @@ export default function MatchDashboard() {
       toast.error("Select Correct Bet Number");
       return;
     }
-    console.log({
-      match_id: match_id,
-      section_id: section_id,
-      type: type,
-      lastDigit: lastDigit,
-    });
+    setFormData({ match_id, section_id, type, lastDigit });
+
+    setBetPopupOpen(true);
   };
 
   const handleExectBet = (match_id, section_id, type) => {
@@ -54,12 +56,14 @@ export default function MatchDashboard() {
       toast.error("Select Correct Bet");
       return;
     }
-    console.log({
-      match_id: match_id,
-      section_id: section_id,
-      type: type,
-      exectRun: exectRun,
+
+    setFormData({
+      match_id,
+      section_id,
+      type,
+      exectRun,
     });
+    setBetPopupOpen(true);
   };
 
   useEffect(() => {
@@ -92,9 +96,15 @@ export default function MatchDashboard() {
   }
 
   return (
-    <div className="w-full m-auto  ">
+    <div
+      className="w-full m-auto  bg-cover"
+      style={{
+        backgroundImage:
+          "url('https://www.financialexpress.com/wp-content/uploads/2022/03/Online-gaming.jpg')",
+      }}
+    >
       <ToastContainer />
-      <div className="max-w-4xl m-auto min-h-screen border px-4 rounded-md border-gray-700 ">
+      <div className="max-w-4xl m-auto min-h-screen border px-4 bg-black/30 backdrop-blur-md rounded-md border-gray-700 ">
         <p className="text-center py-2 rounded-b-xl bg-yellow-400 font-semibold italic">
           TATA IPL 41th Match{" "}
         </p>
@@ -102,11 +112,11 @@ export default function MatchDashboard() {
           <section className="flex flex-col w-[33%] items-center justify-center">
             <img
               alt="team img"
-              src={`${API.url}assets/${data.teams[0].image}`}
+              src={`${API.url}assets/${data?.teams[0]?.image}`}
               className="w-32"
             />
             <p className="text-lg font-semibold italic text-gray-200">
-              {data?.teams[0].team_name}
+              {data?.teams[0]?.team_name}
             </p>
           </section>
           <img
@@ -115,7 +125,11 @@ export default function MatchDashboard() {
             className="w-40 m-auto animate-jump-in animate-duration-500"
           />
           <section className="flex flex-col w-[33%] items-center justify-center">
-            <img alt="team img" src={`${API.url}assets/${data.teams[1].image}`} className="w-32" />
+            <img
+              alt="team img"
+              src={`${API.url}assets/${data?.teams[1]?.image}`}
+              className="w-32"
+            />
             <p className="text-lg font-semibold italic text-gray-200">
               {data?.teams[1]?.team_name}
             </p>
@@ -127,11 +141,11 @@ export default function MatchDashboard() {
             <img
               alt="team"
               className="w-12 m-auto"
-              src={`${API.url}assets/${data.teams[1].image}`}
+              src={`${API.url}assets/${data?.teams[0]?.image}`}
             />
           </section>
-          <div className="w-[85%] flex gap-6 items-center  py-2 justify-center overflow-scroll no-scrollbar ">
-            {data.teams[0].team_members.map((item, index) => (
+          <div className="w-[85%] flex gap-6 items-center  py-2   overflow-scroll no-scrollbar ">
+            {data?.teams[0]?.team_members?.map((item, index) => (
               <div className=" ">
                 <img
                   className="w-12 h-12 p-1 m-auto rounded-full bg-gradient-to-r from-amber-500 to-pink-500 shadow-md"
@@ -139,7 +153,7 @@ export default function MatchDashboard() {
                   alt="member"
                 />
                 <p className="whitespace-nowrap text-center text-xs font-semibold text-gray-400">
-                  {item.name}
+                  {item?.name}
                 </p>
               </div>
             ))}
@@ -150,11 +164,11 @@ export default function MatchDashboard() {
             <img
               alt="team"
               className="w-12 m-auto"
-              src={`${API.url}assets/${data.teams[0].image}`}
+              src={`${API.url}assets/${data?.teams[1]?.image}`}
             />
           </section>
-          <div className="w-[85%] flex gap-6 items-center  py-2 justify-center overflow-x-auto  no-scrollbar">
-            {data.teams[1].team_members.map((item, index) => (
+          <div className="w-[85%] flex gap-6 items-center  py-2 overflow-x-auto  no-scrollbar">
+            {data?.teams[1]?.team_members?.map((item, index) => (
               <div className=" ">
                 <img
                   className="w-12 h-12 p-1 m-auto rounded-full bg-gradient-to-r from-amber-500 to-pink-500 shadow-md"
@@ -162,7 +176,7 @@ export default function MatchDashboard() {
                   alt="member"
                 />
                 <p className="whitespace-nowrap text-center text-xs font-semibold text-gray-400">
-                  {item.name}
+                  {item?.name}
                 </p>
               </div>
             ))}
@@ -176,7 +190,7 @@ export default function MatchDashboard() {
             <div className="bg-gradient-to-r from-blue-800 to-indigo-900 skew-x-[-5deg] rounded">
               <div className="flex justify-between    p-4 mt-4  ">
                 <p className="bg-gradient-to-r from-amber-200 to-yellow-400 bg-clip-text text-transparent font-semibold text-lg">
-                  {item.after_over}th Over
+                  {item?.after_over}th Over
                 </p>
                 <div className="flex gap-4">
                   <button
@@ -223,7 +237,7 @@ export default function MatchDashboard() {
                   <button type="button" class="button-1 ">
                     <div
                       onClick={() =>
-                        handleLastBet(id, item.id, "L", selectedLastDigit)
+                        handleLastBet(id, item?.id, "L", selectedLastDigit)
                       }
                       class="button-top"
                     >
@@ -262,6 +276,23 @@ export default function MatchDashboard() {
           ))}
         </section>
       </div>
+
+      {/* popup */}
+      {isBetPopupOpen && (
+        <MatchGamePopup
+          onclose={() => {
+            setBetPopupOpen(false);
+            setFormData({});
+          }}
+          formData={formData}
+          successFunction={() => {
+            toast.success("Bet Placed Success !", { position: "top-center" });
+            setFormData({});
+            setExectOpen(false);
+            setLastDigitOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -9,6 +9,7 @@ import CoinFlip from "../Componentes/Casino/CoinFlip";
 import { getAllGames } from "../Controllers/User/GamesController";
 import Match from "../Componentes/Casino/Match";
 import MatchDashboard from "../Componentes/Casino/MatchDashboard";
+import MyMatchBets from "../Componentes/GamesComponent/MyMatchBets";
 
 export default function LiveCasino() {
   const location = useLocation();
@@ -72,10 +73,21 @@ export default function LiveCasino() {
             gameData?.some((item) => item.game_name === "Coin Flip")
           ) {
             setGameComponent(<CoinFlip />);
-          } else if (paramsData?.game === "match-lobby") {
+          } else if (
+            paramsData?.game === "match-lobby" &&
+            gameData?.some((item) => item.game_name === "Match")
+          ) {
             setGameComponent(<Match />);
-          }else if (paramsData?.game === "match") {
+          } else if (
+            paramsData?.game === "match" &&
+            gameData?.some((item) => item.game_name === "Match")
+          ) {
             setGameComponent(<MatchDashboard />);
+          } else if (
+            paramsData?.game === "match-bets" &&
+            gameData?.some((item) => item.game_name === "Match")
+          ) {
+            setGameComponent(<MyMatchBets />);
           } else {
             setGameComponent(<Maintainance />);
           }
