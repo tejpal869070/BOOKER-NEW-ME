@@ -34,7 +34,7 @@ export default function Match() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllMatch(); 
+        const response = await getAllMatch();
         setData(response?.data);
         setLoading(false);
       } catch (error) {
@@ -59,7 +59,7 @@ export default function Match() {
       <div class="w-full   flex items-center justify-center min-h-full p-2">
         <div class="container max-w-6xl">
           <div class="  rounded-xl shadow-md overflow-hidden ">
-            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-300 to-blue-800 rounded-xl">
+            {/* <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-300 to-blue-800 rounded-xl">
               <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
                   <h2 class="text-xl font-bold text-gray-800">Team Members</h2>
@@ -101,7 +101,7 @@ export default function Match() {
                   </select>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <Link
               to={{ pathname: "/home", search: "?game=match-bets" }}
@@ -117,53 +117,71 @@ export default function Match() {
             </Link>
 
             {/* matches */}
-            <div class="overflow-x-auto mt-10 ">
+            <div class=" mt-10 max-w-screen overflow-hidden">
               {data?.map((item, index) => (
-                <table
+                <Link
                   key={index}
-                  class="min-w-full divide-y divide-gray-900 rounded-xl overflow-hidden mb-4 animate-fade-up animate-once animate-duration-[800ms]"
+                  to={{
+                    pathname: "/home",
+                    search: `?game=match&id=${item.id}`, // Proper query string formatting
+                  }}
+                  class="min-w-full relative table divide-y divide-gray-900 rounded-xl overflow-hidden mb-4 animate-fade-up animate-once animate-duration-[800ms]"
                 >
-                  <tbody class="bg-gradient-to-r from-slate-500 to-slate-800   rounded-xl">
-                    <tr class=" rounded-xl transition-colors duration-150">
-                      <td class="w-[24%] px-6 py-4 whitespace-nowrap">
+                  <p className="text-sm flex absolute px-2 right-0 z-[9] lg:hidden text-gray-200 py-0.5 bg-gray-700 rounded-bl-xl  ">
+                    {item.status === "LIVE" ? (
+                      <span className="flex items-center gap-2">
+                        <CgMediaLive
+                          color="green"
+                          className="animate-ping"
+                          size={12}
+                        />
+                        Live
+                      </span>
+                    ) : item.status === "C" ? (
+                      <p className="flex gap-3">
+                        COMPLETED <FormatDate date={item.match_time} />
+                      </p>
+                    ) : (
+                      <FormatDate date={item.match_time} />
+                    )}
+                  </p>
+                  <tbody class="bg-gradient-to-r from-slate-500 to-slate-800   rounded-xl ">
+                    <tr class="w-full rounded-xl transition-colors duration-150">
+                      <td class="w-[32%] pt-6 lg:pt-0  lg:w-40   ">
                         <div class="flex flex-col justify-center items-center">
-                          <div class=" w-20  ">
-                            <img
-                              class=" w-40 rounded-full "
-                              src={`${API.url}assets/${item.teams[0].image}`}
-                              alt=""
-                            />
-                          </div>
+                          <img
+                            class=" h-20 w-20 rounded-full "
+                            src={`${API.url}assets/${item.teams[0].image}`}
+                            alt=""
+                          />
                           <div class=" ">
-                            <div class="text-sm text-center font-medium text-gray-300">
+                            <p class="text-sm text-center font-medium text-gray-300 whitespace-normal">
                               {item.teams[0].team_name}
-                            </div>
+                            </p>
                           </div>
                         </div>
                       </td>
-                      <td className="w-[24%]">
+                      <td className="w-[32%] pt-6 lg:pt-0   lg:w-40  whitespace-nowrap">
                         <img alt="vs" src={vsimg} className="w-40 m-auto" />
                       </td>
-                      <td class="w-[24%] px-6 py-4 whitespace-nowrap">
+                      <td class="w-[32%] pt-6 lg:pt-0  lg:w-40   ">
                         <div class="flex flex-col justify-center items-center">
-                          <div class=" w-20  ">
-                            <img
-                              class=" w-40 rounded-full "
-                              src={`${API.url}assets/${item.teams[1].image}`}
-                              alt=""
-                            />
-                          </div>
+                          <img
+                            class=" h-20 w-20  rounded-full "
+                            src={`${API.url}assets/${item.teams[1].image}`}
+                            alt=""
+                          />
                           <div class=" ">
-                            <div class="text-sm text-center font-medium text-gray-300">
+                            <p class="text-sm text-center font-medium text-gray-300 whitespace-normal">
                               {item.teams[1].team_name}
-                            </div>
+                            </p>
                           </div>
                         </div>
                       </td>
-                      <td class=" w-[24%] px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-300 font-semibold">
+                      <td class="hidden lg:table-cell w-[32%] lg:w-40 px-6 py-4 whitespace-nowrap">
+                        <div class="text-xs text-gray-300 font-semibold">
                           <p className="italic underline ">Match Time</p>
-                          <p className="text-lg">
+                          <p className="text-sm">
                             {item.status === "LIVE" ? (
                               <span className="flex items-center gap-2">
                                 <CgMediaLive
@@ -174,7 +192,9 @@ export default function Match() {
                                 Live
                               </span>
                             ) : item.status === "C" ? (
-                              <p>COMPLETED <FormatDate date={item.match_time} /></p>
+                              <p>
+                                COMPLETED <FormatDate date={item.match_time} />
+                              </p>
                             ) : (
                               <FormatDate date={item.match_time} />
                             )}
@@ -182,19 +202,14 @@ export default function Match() {
                         </div>
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-center bg-yellow-200  font-semibold cursor-pointer">
-                        <Link
-                          to={{
-                            pathname: "/home",
-                            search: `?game=match&id=${item.id}`, // Proper query string formatting
-                          }}
-                        >
+                      <Link class="hidden lg:table-cell relative w-[8%]   align-center items-center px-6 py-4 whitespace-nowrap text-center bg-yellow-200  font-semibold cursor-pointer">
+                        <p className=" w-full h-full absolute top-0 left-0 flex justify-center items-center">
                           VIEW
-                        </Link>
-                      </td>
+                        </p>
+                      </Link>
                     </tr>
                   </tbody>
-                </table>
+                </Link>
               ))}
             </div>
           </div>

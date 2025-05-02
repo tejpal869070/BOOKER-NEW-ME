@@ -158,7 +158,7 @@ export default function GameWalletHistory() {
                         </td>
                         <td
                           className={`px-6 py-2 ${
-                            item.description === "Win Bet" ||
+                            item.description === "Win Bet" || item.description === "Match Win" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
                               (item.description === "win" ||
@@ -172,7 +172,7 @@ export default function GameWalletHistory() {
                               : "text-red-600"
                           }`}
                         >
-                          {item.description === "Win Bet" ||
+                          {item.description === "Win Bet" || item.description === "Match Win" ||
                           item.game_type === "Received" ||
                           (item.transaction_type === "credit" &&
                             (item.description === "win" ||
@@ -227,7 +227,7 @@ export default function GameWalletHistory() {
                           </p>
                           <p
                             className={`  ${
-                              item.description === "Win Bet" ||
+                              item.description === "Win Bet" || item.description === "Match Win" ||
                               item.game_type === "Received" ||
                               (item.transaction_type === "credit" &&
                                 (item.description === "win" ||
@@ -241,7 +241,7 @@ export default function GameWalletHistory() {
                                 : "text-red-600"
                             }`}
                           >
-                            {item.description === "Win Bet" ||
+                            {item.description === "Win Bet" || item.description === "Match Win" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
                               (item.description === "win" ||

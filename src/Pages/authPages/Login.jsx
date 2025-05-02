@@ -38,8 +38,7 @@ export default function Login() {
       return;
     }
     try {
-      const response = await userLogin(userData);
-      console.log(response)
+      const response = await userLogin(userData); 
       sessionStorage.setItem("token", response?.data?.token);
       sessionStorage.setItem("email", response?.data?.email);
       toast.success("Login Successfull");

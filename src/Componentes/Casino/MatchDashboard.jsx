@@ -106,16 +106,16 @@ export default function MatchDashboard() {
       <ToastContainer />
       <div className="max-w-4xl m-auto min-h-screen border px-4 bg-black/30 backdrop-blur-md rounded-md border-gray-700 ">
         <p className="text-center py-2 rounded-b-xl bg-yellow-400 font-semibold italic">
-          TATA IPL 41th Match{" "}
+          {data?.title}
         </p>
         <div className="flex justify-between mb-10  ">
           <section className="flex flex-col w-[33%] items-center justify-center">
             <img
               alt="team img"
               src={`${API.url}assets/${data?.teams[0]?.image}`}
-              className="w-32"
+              className="w-16 h-16 md:h-auto md:w-24 lg:w-32"
             />
-            <p className="text-lg font-semibold italic text-gray-200">
+            <p className="text-sm mt-2 lg:text-lg font-semibold italic text-gray-200 text-center">
               {data?.teams[0]?.team_name}
             </p>
           </section>
@@ -128,55 +128,55 @@ export default function MatchDashboard() {
             <img
               alt="team img"
               src={`${API.url}assets/${data?.teams[1]?.image}`}
-              className="w-32"
+              className="w-16 h-16 md:h-auto md:w-24 lg:w-32"
             />
-            <p className="text-lg font-semibold italic text-gray-200">
+            <p className="text-sm mt-2 lg:text-lg font-semibold italic text-gray-200 text-center">
               {data?.teams[1]?.team_name}
             </p>
           </section>
         </div>
 
         <div className="rounded-t  overflow-hidden shadow-md flex justify-between bg-black/50 backdrop-blue-md">
-          <section className="w-[10%]  h-auto flex  bg-gradient-to-r from-blue-800 to-indigo-900">
+          <section className="p-4   h-auto flex  bg-gradient-to-r from-blue-800 to-indigo-900">
             <img
               alt="team"
               className="w-12 m-auto"
               src={`${API.url}assets/${data?.teams[0]?.image}`}
             />
           </section>
-          <div className="w-[85%] flex gap-6 items-center  py-2   overflow-scroll no-scrollbar ">
+          <div className="w-[85%] flex gap-6 items-center  py-2  px-2 overflow-scroll no-scrollbar ">
             {data?.teams[0]?.team_members?.map((item, index) => (
-              <div className=" ">
+              <div className="w-12  ">
                 <img
                   className="w-12 h-12 p-1 m-auto rounded-full bg-gradient-to-r from-amber-500 to-pink-500 shadow-md"
                   src={playerIcon}
                   alt="member"
                 />
-                <p className="whitespace-nowrap text-center text-xs font-semibold text-gray-400">
-                  {item?.name}
+                <p className=" text-center text-xs font-semibold text-gray-400">
+                  {item?.name?.split(" ")[0]}
                 </p>
               </div>
             ))}
           </div>
         </div>
         <div className="rounded-b  overflow-hidden shadow-md flex justify-between bg-black/50 backdrop-blue-md  ">
-          <section className="w-[10%]  h-auto flex  bg-gradient-to-r from-blue-800 to-indigo-900">
+          <section className="p-4   h-auto flex  bg-gradient-to-r from-blue-800 to-indigo-900">
             <img
               alt="team"
               className="w-12 m-auto"
               src={`${API.url}assets/${data?.teams[1]?.image}`}
             />
           </section>
-          <div className="w-[85%] flex gap-6 items-center  py-2 overflow-x-auto  no-scrollbar">
+          <div className="w-[85%] flex gap-6 items-center  py-2 px-2 overflow-x-auto  no-scrollbar">
             {data?.teams[1]?.team_members?.map((item, index) => (
-              <div className=" ">
+              <div className="w-12  ">
                 <img
                   className="w-12 h-12 p-1 m-auto rounded-full bg-gradient-to-r from-amber-500 to-pink-500 shadow-md"
                   src={playerIcon}
                   alt="member"
                 />
-                <p className="whitespace-nowrap text-center text-xs font-semibold text-gray-400">
-                  {item?.name}
+                <p className=" text-center text-xs font-semibold text-gray-400">
+                  {item?.name?.split(" ")[0]}
                 </p>
               </div>
             ))}
@@ -189,7 +189,7 @@ export default function MatchDashboard() {
           {data?.sections?.map((item, index) => (
             <div className="bg-gradient-to-r from-blue-800 to-indigo-900 skew-x-[-5deg] rounded">
               <div className="flex justify-between    p-4 mt-4  ">
-                <p className="bg-gradient-to-r from-amber-200 to-yellow-400 bg-clip-text text-transparent font-semibold text-lg">
+                <p className="bg-gradient-to-r whitespace-nowrap from-amber-200 to-yellow-400 bg-clip-text text-transparent font-semibold text-lg">
                   {item?.after_over}th Over
                 </p>
                 <div className="flex gap-4">
@@ -200,7 +200,7 @@ export default function MatchDashboard() {
                       setLastDigitOpen(false);
                       setExectRun(0);
                     }}
-                    className="px-8 py-0.5  border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
+                    className="px-4 lg:px-8 py-0.5 whitespace-nowrap  border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
                   >
                     Exect Run
                   </button>
@@ -211,7 +211,7 @@ export default function MatchDashboard() {
                       setSelectedLastDigit(null);
                       setExectOpen(false);
                     }}
-                    className="px-8 py-0.5 border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
+                    className="px-8 py-0.5 whitespace-nowrap border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
                   >
                     Last Digit
                   </button>
@@ -220,7 +220,7 @@ export default function MatchDashboard() {
               {/* selection of digit */}
               {isLastDigitOpen && selectedSection === index && (
                 <div className="flex justify-around items-center border-t-2 border-indigo-400 border-dotted">
-                  <div className="flex gap-3 justify-center py-4 ">
+                  <div className="flex flex-wrap gap-3 justify-center py-4 ">
                     {lastDigit.map((i, index) => (
                       <p
                         key={index}
@@ -252,7 +252,7 @@ export default function MatchDashboard() {
               {isExectOpen && selectedSection === index && (
                 <div className="flex justify-around items-center border-t-2 border-indigo-400 border-dotted">
                   <div className="flex gap-3 justify-center py-4 text-gray-200">
-                    Exect Run After {item.after_over}th Over
+                    Exect Run 
                     <input
                       value={exectRun}
                       type="number"
