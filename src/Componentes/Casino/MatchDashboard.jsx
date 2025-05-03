@@ -211,7 +211,7 @@ export default function MatchDashboard() {
                       setSelectedLastDigit(null);
                       setExectOpen(false);
                     }}
-                    className="px-8 py-0.5 whitespace-nowrap border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
+                    className="px-4 lg:px-8 py-0.5 whitespace-nowrap border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
                   >
                     Last Digit
                   </button>
@@ -252,7 +252,7 @@ export default function MatchDashboard() {
               {isExectOpen && selectedSection === index && (
                 <div className="flex justify-around items-center border-t-2 border-indigo-400 border-dotted">
                   <div className="flex gap-3 justify-center py-4 text-gray-200">
-                    Exect Run 
+                    Exect Run
                     <input
                       value={exectRun}
                       type="number"

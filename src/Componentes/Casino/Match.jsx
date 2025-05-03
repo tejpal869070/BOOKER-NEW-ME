@@ -202,11 +202,11 @@ export default function Match() {
                         </div>
                       </td>
 
-                      <Link class="hidden lg:table-cell relative w-[8%]   align-center items-center px-6 py-4 whitespace-nowrap text-center bg-yellow-200  font-semibold cursor-pointer">
+                      <div class="hidden lg:table-cell relative w-[8%]   align-center items-center px-6 py-4 whitespace-nowrap text-center bg-yellow-200  font-semibold cursor-pointer">
                         <p className=" w-full h-full absolute top-0 left-0 flex justify-center items-center">
                           VIEW
                         </p>
-                      </Link>
+                      </div>
                     </tr>
                   </tbody>
                 </Link>
