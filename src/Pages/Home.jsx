@@ -791,7 +791,7 @@ export default function Home() {
                     Send Money
                   </Link>
                 </li> */}
-                <li className="ml-11">
+                {/* <li className="ml-11">
                   <Link
                     to={{ pathname: "/home", search: `?account=today-history` }}
                     className={`${dropdownClassList}`}
@@ -799,7 +799,7 @@ export default function Home() {
                   >
                     Today History
                   </Link>
-                </li>
+                </li> */}
                 <li className="ml-11">
                   <Link
                     to={{

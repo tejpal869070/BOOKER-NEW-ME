@@ -42,8 +42,7 @@ export default function Hero1() {
   };
 
   const userDataGet = async () => {
-    const response = await GetUserDetails();
-    console.log(response?.data?.user);
+    const response = await GetUserDetails(); 
     if (response !== null) {
       setUserData(response?.data?.user);
       sessionStorage.setItem(
@@ -223,7 +222,7 @@ export default function Hero1() {
             />{" "}
             $
             {(
-              Number(userData.wallet_balance) +
+              Number(userData.main_wallet) +
               Number(userData.game_wallet)
             ).toFixed(2)}
           </p>

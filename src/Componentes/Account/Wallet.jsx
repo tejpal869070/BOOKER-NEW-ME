@@ -36,7 +36,7 @@ export default function Wallet() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setUser(response[0]);
+      setUser(response?.data?.user)
       setLoading(false);
     }
   };
@@ -130,7 +130,7 @@ export default function Wallet() {
                 $
                 {user &&
                   (
-                    Number(user.wallet_balance) +
+                    Number(user.main_wallet) +
                     Number(user.game_wallet)
                   ).toFixed(2)}
               </p>
@@ -141,7 +141,7 @@ export default function Wallet() {
               <section className="flex items-center bg-gradient-to-r from-violet-400 to-purple-300 rounded-xl">
                 <div className="w-1/2 rounded-tl-xl py-1 flex flex-col items-center justify-center border-r-2 border-gray-200">
                   <p className="font-semibold text-lg text-[#d8ff00]">
-                    ${user && Number(user.wallet_balance).toFixed(2)}
+                    ${user && Number(user.main_wallet).toFixed(2)}
                   </p>
                   <p className="text-center text-xs font-semibold   text-gray-900     ">
                     Main Wallet
@@ -255,7 +255,7 @@ export default function Wallet() {
                 <span className="text-lg font-bold">
                   ${" "}
                   {type === 1
-                    ? Number(user.wallet_balance).toFixed(2)
+                    ? Number(user.main_wallet).toFixed(2)
                     : Number(user.game_wallet).toFixed(2)}
                 </span>
               </p>{" "}
