@@ -684,3 +684,11 @@ export const ClaimReward = async (type) => {
     throw error;
   }
 };
+
+export const forgetPassword = async (email, password) => {
+  const response = await axios.post(`${API.url}forget-password`, {
+    email,
+    password,
+  });
+  return response;
+};

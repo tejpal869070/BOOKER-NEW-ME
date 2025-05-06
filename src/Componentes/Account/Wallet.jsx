@@ -13,7 +13,8 @@ import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import VerifyPin from "../VerifyPin";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { MainGameWalletMoneyTransfer } from "../../Controllers/User/GamesController";
 import { IoGameController } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
@@ -36,7 +37,7 @@ export default function Wallet() {
   const userDataGet = async () => {
     const response = await GetUserDetails();
     if (response !== null) {
-      setUser(response?.data?.user)
+      setUser(response?.data?.user);
       setLoading(false);
     }
   };
@@ -76,20 +77,15 @@ export default function Wallet() {
 
   const successFunction = async (pin) => {
     try {
-      const response = await MainGameWalletMoneyTransfer(formData, pin);
-      if (response.status) {
-        setSuccess(true);
-        userDataGet();
-        setTransferToAmount(0);
-        setIsOpen(false);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 3500);
-      } else {
-        toast.error(`Please Try Again !`, {
-          position: "top-center",
-        });
-      }
+      await MainGameWalletMoneyTransfer(formData, pin);
+
+      setSuccess(true);
+      userDataGet();
+      setTransferToAmount(0);
+      setIsOpen(false);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3500);
     } catch (error) {
       if (error.response.status === 302) {
         toast.error(`${error.response.data.message}`, {
@@ -129,10 +125,9 @@ export default function Wallet() {
               <p className="text-3xl font-bold text-center mt-2 dark:text-gray-100 ">
                 $
                 {user &&
-                  (
-                    Number(user.main_wallet) +
-                    Number(user.game_wallet)
-                  ).toFixed(2)}
+                  (Number(user.main_wallet) + Number(user.game_wallet)).toFixed(
+                    2
+                  )}
               </p>
               <p className="text-center text-xs font-semibold italic  text-gray-900 -mt-1 pb-4  ">
                 Total Balance

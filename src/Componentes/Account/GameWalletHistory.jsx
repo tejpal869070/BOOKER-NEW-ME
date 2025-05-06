@@ -40,7 +40,7 @@ export default function GameWalletHistory() {
 
   const GetAllStatement = async () => {
     try {
-      const response = await GetGameWalletStatement(pageId); 
+      const response = await GetGameWalletStatement(pageId);
       setData(response?.reverse());
       setLoading(false);
     } catch (error) {
@@ -78,7 +78,7 @@ export default function GameWalletHistory() {
     }
   }, [startDate, endDate, data]);
 
-  console.log(data)
+  console.log(data);
 
   if (loading) {
     return (
@@ -158,7 +158,9 @@ export default function GameWalletHistory() {
                         </td>
                         <td
                           className={`px-6 py-2 ${
-                            item.description === "Win Bet" || item.description === "Match Win" ||
+                            item.description === "Win Bet" || item.description === "Bet Win Added" || 
+                            item.description === "Match Win" ||
+                            item.game_name === "Received" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
                               (item.description === "win" ||
@@ -172,7 +174,9 @@ export default function GameWalletHistory() {
                               : "text-red-600"
                           }`}
                         >
-                          {item.description === "Win Bet" || item.description === "Match Win" ||
+                          {item.description === "Win Bet" || item.description === "Bet Win Added" || 
+                          item.description === "Match Win" ||
+                          item.game_name === "Received" ||
                           item.game_type === "Received" ||
                           (item.transaction_type === "credit" &&
                             (item.description === "win" ||
@@ -227,7 +231,9 @@ export default function GameWalletHistory() {
                           </p>
                           <p
                             className={`  ${
-                              item.description === "Win Bet" || item.description === "Match Win" ||
+                              item.description === "Win Bet" || item.description === "Bet Win Added" || 
+                              item.description === "Match Win" ||
+                              item.game_name === "Received" ||
                               item.game_type === "Received" ||
                               (item.transaction_type === "credit" &&
                                 (item.description === "win" ||
@@ -241,7 +247,9 @@ export default function GameWalletHistory() {
                                 : "text-red-600"
                             }`}
                           >
-                            {item.description === "Win Bet" || item.description === "Match Win" ||
+                            {item.description === "Win Bet" || item.description === "Bet Win Added" || 
+                            item.description === "Match Win" ||
+                            item.game_name === "Received" ||
                             item.game_type === "Received" ||
                             (item.transaction_type === "credit" &&
                               (item.description === "win" ||

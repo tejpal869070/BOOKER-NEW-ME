@@ -8,6 +8,8 @@ export default function MyMatchBets() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
+  console.log(data)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,6 +54,9 @@ export default function MyMatchBets() {
                       Bet Type
                     </th>
                     <th scope="col" class="px-4 py-3 whitespace-nowrap">
+                      Bet Team
+                    </th>
+                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
                       Over section
                     </th>
                     <th scope="col" class="px-4 py-3 whitespace-nowrap">
@@ -94,6 +99,9 @@ export default function MyMatchBets() {
                           : "Guessed Exect Runs  "}
                       </td>
                       <td class="px-4 py-3 whitespace-nowrap">
+                        {item.team_name }
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap">
                         After{" "}
                         {
                           item.match_details?.sections?.find(
@@ -115,7 +123,7 @@ export default function MyMatchBets() {
                           {
                             item.match_details?.sections?.find(
                               (i) => Number(i.id) === Number(item.section_id)
-                            )?.result
+                            )?.result?.find(j => j.team_name === item.team_name)?.score || 0
                           }
                         </p>
                       </td>

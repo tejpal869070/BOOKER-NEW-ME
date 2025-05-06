@@ -35,7 +35,7 @@ export default function Match() {
     const fetchData = async () => {
       try {
         const response = await getAllMatch();
-        setData(response?.data);
+        setData(response?.data?.reverse());
         setLoading(false);
       } catch (error) {
         toast.error("Something Went Wrong !");

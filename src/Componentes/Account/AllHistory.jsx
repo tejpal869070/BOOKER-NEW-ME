@@ -17,7 +17,11 @@ export default function AllHistory() {
       <div className="flex  overflow-scroll gap-2 mt-4 justify-around w-full p-2 rounded-t-md bg-gradient-to-r from-purple-500 to-indigo-500">
         {links.map((item, index) => (
           <div
-            className={`flex flex-col    flex-start items-center cursor-pointer  backdrop-blur-md bg-white/30    ${selected===index ? "border-2 border-gray-300 border-b-0 rounded-b-0 rounded-t" : "rounded"}`}
+            className={`flex flex-col    flex-start items-center cursor-pointer  backdrop-blur-md bg-white/30    ${
+              selected === index
+                ? "border-2 border-gray-300 border-b-0 rounded-b-0 rounded-t"
+                : "rounded"
+            }`}
             onClick={() => setSelected(index)}
           >
             <img
@@ -25,7 +29,11 @@ export default function AllHistory() {
               className="w-14 p-2 rounded-lg "
               src={item.icons}
             />
-            <p className={`text-sm font-medium bg-black/30  px-2 py-0.5 w-full text-gray-200 mt-1 text-center whitespace-nowrap ${selected!==index && "rounded-b"} `} >
+            <p
+              className={`text-sm font-medium bg-black/30  px-2 py-0.5 w-full text-gray-200 mt-1 text-center whitespace-nowrap ${
+                selected !== index && "rounded-b"
+              } `}
+            >
               {item.title}
             </p>
           </div>
@@ -73,19 +81,7 @@ export default function AllHistory() {
         ) : selected === 2 ? (
           <WithdrawalHistory />
         ) : selected === 3 ? (
-          <TodayHistory />
-        ) : selected === 4 ? (
           <GameWalletHistory />
-        ) : selected === 5 ? (
-          <RoiIncome />
-        ) : selected === 6 ? (
-          <LevelIncome />
-        ) : selected === 7 ? (
-          <ReferIncome />
-        ) : selected === 8 ? (
-          <MatchingIncome />
-        ) : selected === 9 ? (
-          <InvestmentHistory />
         ) : (
           ""
         )}
@@ -110,39 +106,10 @@ const links = [
     title: "Withdrawal History",
     icons: require("../../assets/photos/withdraw.png"),
   },
+
   {
     id: 4,
-    title: "Today Statement",
-    icons: require("../../assets/photos/calendar.png"),
-  },
-  {
-    id: 5,
     title: "Game Wallet",
     icons: require("../../assets/photos/joystick.png"),
-  },
-  {
-    id: 5,
-    title: "ROI Income",
-    icons: require("../../assets/photos/salary.png"),
-  },
-  {
-    id: 6,
-    title: "Level Income",
-    icons: require("../../assets/photos/mutual-fund.png"),
-  },
-  {
-    id: 7,
-    title: "Refer Income",
-    icons: require("../../assets/photos/earnings.png"),
-  },
-  {
-    id: 8,
-    title: "Matching Income",
-    icons: require("../../assets/photos/match.png"),
-  },
-  {
-    id: 9,
-    title: "Investment History",
-    icons: require("../../assets/photos/earning.png"),
   },
 ];

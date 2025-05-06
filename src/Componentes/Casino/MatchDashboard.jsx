@@ -16,6 +16,7 @@ export default function MatchDashboard() {
   const [selectedLastDigit, setSelectedLastDigit] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
   const [isExectOpen, setExectOpen] = useState(false);
+  const [selectedTeamName, setSelectedTeamName] = useState(null);
 
   const [isBetPopupOpen, setBetPopupOpen] = useState(false);
 
@@ -38,7 +39,7 @@ export default function MatchDashboard() {
       toast.error("Select Correct Bet Number");
       return;
     }
-    setFormData({ match_id, section_id, type, lastDigit });
+    setFormData({ match_id, section_id, type, lastDigit, selectedTeamName });
 
     setBetPopupOpen(true);
   };
@@ -63,6 +64,7 @@ export default function MatchDashboard() {
       section_id,
       type,
       exectRun,
+      selectedTeamName,
     });
     setBetPopupOpen(true);
   };
@@ -76,6 +78,8 @@ export default function MatchDashboard() {
     const fetchData = async () => {
       try {
         const response = await getSingleMatchData(id);
+        console.log(response);
+        setSelectedTeamName(response.data?.teams[0].team_name);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -216,7 +220,11 @@ export default function MatchDashboard() {
                         {section.after_over} OVER
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-200">
-                        {section.result} runs
+                        {section.result.map((res, idx) => (
+                          <div key={idx}>
+                            {res.team_name}: {res.score}
+                          </div>
+                        ))}
                       </td>
                     </tr>
                   ))}
@@ -226,6 +234,22 @@ export default function MatchDashboard() {
           </div>
         ) : (
           <section className="animate-flip-up">
+            <div className="mt-4  flex items-center gap-1 justify-end">
+              <p className="font-semibold text-lg text-gray-200 italic   rounded   rounded-tr-0">
+                SELECT TEAM:-
+              </p>{" "}
+              <select
+                value={selectedTeamName}
+                onChange={(e) => setSelectedTeamName(e.target.value)}
+                className="skew-x-[-5deg] w-40 rounded bg-indigo-200 border-gray-900 text-gray-700 font-semibold text-lg cursor-pointer"
+              >
+                {data?.teams.map((item, index) => (
+                  <option key={index} value={item.team_name}>
+                    {item.team_name}
+                  </option>
+                ))}
+              </select>
+            </div>
             {data?.sections?.map((item, index) => (
               <div className="bg-gradient-to-r from-blue-800 to-indigo-900 skew-x-[-5deg] rounded">
                 <div className="flex justify-between    p-4 mt-4  ">

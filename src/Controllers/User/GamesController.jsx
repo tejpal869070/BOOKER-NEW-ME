@@ -282,6 +282,7 @@ export const addMatchBet = async (formData) => {
     bet_value: formData.type === "L" ? formData.lastDigit : formData.exectRun,
     amount: formData.amount,
     section_id: formData.section_id,
+    selectedTeamName : formData.selectedTeamName
   };
   const axiosConfig = {
     headers: {

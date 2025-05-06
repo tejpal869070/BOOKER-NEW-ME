@@ -8,7 +8,9 @@ import {
 } from "../../Controllers/Auth/AuthController";
 import { Loading1 } from "../../Componentes/Loading1";
 import OTPInput from "react-otp-input";
- import { ToastContainer, toast } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { forgetPassword } from "../../Controllers/User/UserController";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
@@ -44,14 +46,10 @@ export default function ForgetPassword() {
     try {
       // otp send function
       const otpResponse = await SendOtp(formData);
-
-      if (otpResponse.status) {
-        setError("");
-        setOtpSent(true);
-        setShowOtp(otpResponse.data[0].otp);
-      } else {
-        setError("Server Error !");
-      }
+      console.log(otpResponse);
+      setError("");
+      setOtpSent(true);
+      setShowOtp(otpResponse.otp);
     } catch (error) {
       setError("An unexpected error occurred.");
     } finally {
@@ -71,22 +69,18 @@ export default function ForgetPassword() {
     formData.otp = otp;
     try {
       const verifyResponse = await VerifyOtp(formData);
-      if (verifyResponse.status) {
-        setToken(verifyResponse.token);
-        toast.success("OTP Verified Successfully");
-        setVerifyOtp(false);
-        setOtpSuccess(true);
-        setOtp("");
-      } else {
-        toast.error("Invalid OTP");
-        setVerifyOtp(false);
-      }
+      console.log(verifyResponse);
+      // setToken(verifyResponse.token);
+      toast.success("OTP Verified Successfully");
+      setVerifyOtp(false);
+      setOtpSuccess(true);
+      setOtp("");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         toast.error("Invalid OTP");
         setVerifyOtp(false);
       } else {
-        toast.error("Server Error !");
+        toast.error("Server Errorr !");
         setVerifyOtp(false);
       }
     }
@@ -106,17 +100,13 @@ export default function ForgetPassword() {
       return;
     }
     try {
-      const response = await ForgetPasswordApi(formData);
-      if (response.status) {
-        toast.success("Password Changed Successfully");
-        setChangingPassword(false);
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 1300);
-      } else {
-        toast.error("Failed to Change Password");
-        setChangingPassword(false);
-      }
+      await forgetPassword(email, password);
+
+      toast.success("Password Changed Successfully");
+      setChangingPassword(false);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     } catch (error) {
       toast.error("Server Error !");
 
@@ -129,13 +119,10 @@ export default function ForgetPassword() {
     try {
       setSendingOtp(true);
       const otpResponse = await SendOtp(formData);
-      if (otpResponse.status) {
-        setError("");
-        toast.success("OTP Sent.");
-        setShowOtp(otpResponse.data[0].otp);
-      } else {
-        setError("Server Error !");
-      }
+      console.log(otpResponse);
+      setError("");
+      toast.success("OTP Sent.");
+      setShowOtp(otpResponse.otp);
     } catch (error) {
       setError("Server Error !");
     } finally {

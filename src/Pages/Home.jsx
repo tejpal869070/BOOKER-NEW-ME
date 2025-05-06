@@ -985,8 +985,8 @@ export default function Home() {
                 Wallet
               </span>
             </Link>
-            <Link
-              to={{ pathname: "/home", search: "?user=VIP" }}
+            <div
+              // to={{ pathname: "/home", search: "?user=VIP" }}
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <RiVipDiamondFill
@@ -996,9 +996,9 @@ export default function Home() {
               <span className="text-sm text-gray-500 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-500">
                 VIP
               </span>
-            </Link>
-            <Link
-              to={{ pathname: "/home", search: "?user=refer" }}
+            </div>
+            <div
+              // to={{ pathname: "/home", search: "?user=refer" }}
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <FaSackDollar
@@ -1008,9 +1008,9 @@ export default function Home() {
               <span className="text-sm text-gray-500 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-500">
                 Refer
               </span>
-            </Link>
-            <Link
-              to={{ pathname: "/home", search: `?user=investment` }}
+            </div>
+            <div
+              // to={{ pathname: "/home", search: `?user=investment` }}
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <img
@@ -1021,7 +1021,7 @@ export default function Home() {
               <span className="text-sm text-gray-500 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-500">
                 Invest
               </span>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

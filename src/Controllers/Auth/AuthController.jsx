@@ -31,7 +31,7 @@ export const userRegistration = async (formData) => {
 
 export const userLogin = async (userData) => {
   const postData = {
-    email: userData.email,
+    emailOrMobile: userData.email,
     password: userData.password,
   };
 
