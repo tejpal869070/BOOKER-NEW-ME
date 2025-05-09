@@ -101,10 +101,10 @@ export default function MatchDashboard() {
   return (
     <div
       className="w-full m-auto  bg-cover pb-6"
-      style={{
-        backgroundImage:
-          "url('https://www.financialexpress.com/wp-content/uploads/2022/03/Online-gaming.jpg')",
-      }}
+      // style={{
+      //   backgroundImage:
+      //     "url('https://www.financialexpress.com/wp-content/uploads/2022/03/Online-gaming.jpg')",
+      // }}
     >
       <ToastContainer />
       <div className="max-w-4xl m-auto min-h-screen border px-4 bg-black/30 backdrop-blur-md rounded-md border-gray-700 ">
@@ -139,7 +139,7 @@ export default function MatchDashboard() {
           </section>
         </div>
 
-        <div className="rounded-t  overflow-hidden shadow-md flex justify-between bg-black/50 backdrop-blue-md">
+        {/* <div className="rounded-t  overflow-hidden shadow-md flex justify-between bg-black/50 backdrop-blue-md">
           <section className="p-4   h-auto flex  bg-gradient-to-r from-blue-800 to-indigo-900">
             <img
               alt="team"
@@ -184,7 +184,7 @@ export default function MatchDashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         <div className="flex"></div>
 

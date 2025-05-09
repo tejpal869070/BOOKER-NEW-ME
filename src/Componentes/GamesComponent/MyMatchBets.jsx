@@ -7,14 +7,13 @@ import { FaBaseballBall } from "react-icons/fa";
 export default function MyMatchBets() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-
-  console.log(data)
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getMyMatchBets();
-        setData(response.data);
+        setData(response.data.reverse());
       } catch (error) {
         toast.error(
           error?.response?.data?.message || "Internal Server Error !"
@@ -27,6 +26,12 @@ export default function MyMatchBets() {
     fetchData();
   }, []);
 
+  const [expandedBetId, setExpandedBetId] = useState(null);
+
+  const toggleExpand = (id) => {
+    setExpandedBetId(expandedBetId === id ? null : id);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center ">
@@ -37,111 +42,78 @@ export default function MyMatchBets() {
 
   return (
     <div>
-      <section class=" bg-gray-900  sm:p-5 min-h-screen">
-        <div class="mx-auto max-w-screen-xl   lg:px-12">
-          <div class="  bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm text-left text-gray-500  ">
-                <thead class="text-xs   uppercase  bg-gray-700  text-gray-400">
-                  <tr>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      M.Id
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Match
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Bet Type
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Bet Team
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Over section
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Value
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Result
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      amount
-                    </th>
-                    <th scope="col" class="px-4 py-3 whitespace-nowrap">
-                      Win amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.reverse()?.map((item, index) => (
-                    <tr
-                      key={index}
-                      class="border-b  border-gray-900 text-gray-300"
-                    >
-                      <th
-                        scope="row"
-                        class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {item.match_id}
-                      </th>
-                      <td class="px-4 py-3 whitespace-nowrap">
-                        <p className="text-red-400">
-                          {item.match_details?.teams[0].team_name}
-                        </p>
-                        <p className="text-yellow-300">
-                          {item.match_details?.teams[1].team_name}
-                        </p>
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap">
-                        {item.bet_type === "L"
-                          ? "Guessed Last Digit"
-                          : "Guessed Exect Runs  "}
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap">
-                        {item.team_name }
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap">
-                        After{" "}
-                        {
-                          item.match_details?.sections?.find(
-                            (i) => Number(i.id) === Number(item.section_id)
-                          )?.after_over
-                        }
-                        th over
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap ">
-                        {item.bet_type === "L"
-                          ? `__${item.bet_value}`
-                          : item.bet_value}
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap     ">
-                        <p className="flex items-center gap-1">
-                          <span>
-                          <FaBaseballBall size={16} className="text-red-500" />
-                          </span>
-                          {
-                            item.match_details?.sections?.find(
-                              (i) => Number(i.id) === Number(item.section_id)
-                            )?.result?.find(j => j.team_name === item.team_name)?.score || 0
-                          }
-                        </p>
-                      </td>
+      <div className="p-4 max-w-md mx-auto">
+      <h2 className="text-xl font-semibold text-gray-200 mb-4 text-center">My Bets</h2>
+      {data?.map((bet) => {
+        const match = bet.match_details;
+        const section = match.sections.find(sec => sec.id === parseInt(bet.section_id));
+        const result = section?.result?.find(r => r.team_name.toUpperCase() === bet.team_name.toUpperCase());
+        const isWin = parseFloat(bet.win_amount || 0) > 0;
 
-                      <td class="px-4 py-3 whitespace-nowrap text-red-600 font-medium">
-                        $ {item.amount}
-                      </td>
-                      <td class="px-4 py-3 whitespace-nowrap text-[#23d59d] font-medium">
-                        $ {item.win_amount}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        return (
+          <div
+            key={bet.id}
+            className={`bg-white rounded-lg shadow-md mb-4 p-4 transition-all ${
+              isWin ? 'border-l-4 border-green-500' : 'border-l-4 border-red-500'
+            }`}
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="font-bold text-sm">{match.title}</div>
+                <div className="text-xs text-gray-500">
+                  {new Date(match.match_time).toLocaleString()}
+                </div>
+              </div>
+              <button
+                onClick={() => toggleExpand(bet.id)}
+                className="text-blue-500 text-sm"
+              >
+                {expandedBetId === bet.id ? 'Hide' : 'Details'}
+              </button>
             </div>
+
+            <div className="mt-2 text-sm">
+              <div className="flex justify-between">
+                <span className="font-medium">Team:</span>
+                <span>{bet.team_name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Type:</span>
+                <span>{bet.bet_type === "L"
+                          ? "Guessed Last Digit"
+                          : "Guessed Exect Runs  "}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Bet:</span>
+                <span>{bet.bet_value} {bet.bet_type === "E" && "Runs"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Amount:</span>
+                <span>₹{bet.amount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Won:</span>
+                <span className={isWin ? 'text-green-600' : 'text-red-600'}>
+                  ₹{bet.win_amount || '0'}
+                </span>
+              </div>
+            </div>
+
+            {expandedBetId === bet.id && section && (
+              <div className="mt-3 text-xs text-gray-600 border-t pt-2">
+                <div className="mb-1 font-semibold">Section After Over: {section.after_over}</div>
+                {section?.result?.map((r, idx) => (
+                  <div key={idx} className="flex justify-between">
+                    <span>{r.team_name}</span>
+                    <span>{r.score} runs</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        );
+      })}
+    </div>
     </div>
   );
 }

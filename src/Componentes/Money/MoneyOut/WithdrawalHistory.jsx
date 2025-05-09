@@ -169,7 +169,7 @@ export default function WithdrawalHistory() {
                           ${item.amount}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 ">
-                          {item.status === "P" ? "Pending" : item.status === "C" ? "Cancelled" : item.status === "I" ? "Inprocess" : item.status === "R" ? "Rejected" : ""}
+                          {item.status === "P" ? "Pending" : item.status === "C" ? "Cancelled" : item.status === "I" ? "Inprocess" : item.status === "R" ? "Rejected" : item.status === "S" ? "Success" : ""}
                         </td>
                         <td className="whitespace-nowrap flex items-center gap-1 px-6 py-4 ">
                           {item.withdrawal_address.slice(0, 8)}.....
