@@ -268,7 +268,7 @@ export const getAllMatch = async () => {
 };
 
 export const getSingleMatchData = async (id) => {
-  const response = await axios.post(`${API.url}get-single-match-detail `, {
+  const response = await axios.post(`${API.url}admin/get-single-match-detail `, {
     id,
   });
   return response;

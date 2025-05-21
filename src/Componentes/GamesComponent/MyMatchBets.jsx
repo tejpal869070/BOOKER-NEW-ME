@@ -94,7 +94,7 @@ export default function MyMatchBets() {
               <div className="flex justify-between">
                 <span className="font-medium">Won:</span>
                 <span className={isWin ? 'text-green-600' : 'text-red-600'}>
-                  ₹{bet.win_amount || '0'}
+                  ₹{bet.win_amount || '_'}
                 </span>
               </div>
             </div>
