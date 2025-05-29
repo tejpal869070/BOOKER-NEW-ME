@@ -1,9 +1,9 @@
  
 
 export const API = {
-  url: "http://192.168.29.170:3000/",
-  colorGameUrl: "http://192.168.29.170:3000/game/",
-  gametype_hostURL: "http://192.168.29.170:3000/image/game-type/",
+  url: "http://192.168.29.169:3000/",
+  colorGameUrl: "http://192.168.29.169:3000/game/",
+  gametype_hostURL: "http://192.168.29.169:3000/image/game-type/",
 };
 
 // export const API = {

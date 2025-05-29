@@ -188,6 +188,113 @@ export default function MatchDashboard() {
 
         <div className="flex"></div>
 
+        <section className="animate-flip-up">
+            <div className="mt-4  flex items-center gap-1 justify-end">
+              <p className="font-semibold text-lg text-gray-200 italic   rounded   rounded-tr-0">
+                SELECT TEAM:-
+              </p>{" "}
+              <select
+                value={selectedTeamName}
+                onChange={(e) => setSelectedTeamName(e.target.value)}
+                className="skew-x-[-5deg] w-40 rounded bg-indigo-200 border-gray-900 text-gray-700 font-semibold text-lg cursor-pointer"
+              >
+                {data?.teams.map((item, index) => (
+                  <option key={index} value={item.team_name}>
+                    {item.team_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {data?.sections?.map((item, index) => (
+              <div className="bg-gradient-to-r from-blue-800 to-indigo-900 skew-x-[-5deg] rounded">
+                <div className="flex justify-between    p-4 mt-4  ">
+                  <p className="bg-gradient-to-r whitespace-nowrap from-amber-200 to-yellow-400 bg-clip-text text-transparent font-semibold text-lg">
+                    {item?.after_over}th Over
+                  </p>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => {
+                        setExectOpen((pre) => !pre);
+                        setSelectedSection(index);
+                        setLastDigitOpen(false);
+                        setExectRun(0);
+                      }}
+                      className="px-4 lg:px-8 py-0.5 whitespace-nowrap  border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
+                    >
+                      Exect Run
+                    </button>
+                    <button
+                      onClick={() => {
+                        setLastDigitOpen((pre) => !pre);
+                        setSelectedSection(index);
+                        setSelectedLastDigit(null);
+                        setExectOpen(false);
+                      }}
+                      className="px-4 lg:px-8 py-0.5 whitespace-nowrap border-2 border-black font-semibold  uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] "
+                    >
+                      Last Digit
+                    </button>
+                  </div>
+                </div>
+                {/* selection of digit */}
+                {isLastDigitOpen && selectedSection === index && (
+                  <div className="flex justify-around items-center border-t-2 border-indigo-400 border-dotted">
+                    <div className="flex flex-wrap gap-3 justify-center py-4 ">
+                      {lastDigit.map((i, index) => (
+                        <p
+                          key={index}
+                          onClick={() => setSelectedLastDigit(i)}
+                          className={`w-8 h-8 flex justify-center font-semibold items-center cursor-pointer animate-flip-down rounded-md bg-gradient-to-r from-violet-600 to-indigo-600 ${
+                            selectedLastDigit === i &&
+                            "border border-red-100 text-gray-100"
+                          }`}
+                        >
+                          {i}
+                        </p>
+                      ))}
+                    </div>
+                    <button type="button" class="button-1 ">
+                      <div
+                        onClick={() =>
+                          handleLastBet(id, item?.id, "L", selectedLastDigit)
+                        }
+                        class="button-top"
+                      >
+                        BET
+                      </div>
+                      <div class="button-bottom"></div>
+                      <div class="button-base"></div>
+                    </button>
+                  </div>
+                )}
+
+                {isExectOpen && selectedSection === index && (
+                  <div className="flex justify-around items-center border-t-2 border-indigo-400 border-dotted">
+                    <div className="flex gap-3 justify-center py-4 text-gray-200">
+                      Exect Run
+                      <input
+                        value={exectRun}
+                        type="number"
+                        onChange={(e) => setExectRun(e.target.value)}
+                        className="w-20 rounded border-2 text-lg h-10 border-black ring text-gray-900 font-semibold px-2"
+                      />
+                    </div>
+                    <button type="button" class="button-1 ">
+                      <div
+                        onClick={() => handleExectBet(id, item.id, "E")}
+                        class="button-top"
+                      >
+                        BET
+                      </div>
+                      <div class="button-bottom"></div>
+                      <div class="button-base"></div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </section>
+
         {data?.status === "C" ? (
           <div className="mt-6">
             <img
@@ -220,7 +327,7 @@ export default function MatchDashboard() {
                         {section.after_over} OVER
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-200">
-                        {section.result.map((res, idx) => (
+                        {section?.result?.map((res, idx) => (
                           <div key={idx}>
                             {res.team_name}: {res.score}
                           </div>

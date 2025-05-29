@@ -19,7 +19,7 @@ const CreatePin = () => {
       setError("Invalid PIN");
       setLoading(false);
       return;
-    }
+    } 
     setError("");
     try {
       await CreateAccountPin(pin); 
